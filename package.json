@@ -4,14 +4,21 @@
   "description": "Prometheus wrapper for Adonis 5",
   "main": "build/providers/PrometheusProvider.js",
   "typings": "./build/adonis-typings/index.d.ts",
+  "files": [
+    "build/adonis-typings",
+    "build/providers",
+    "build/src",
+    "build/templates"
+  ],
   "scripts": {
     "mrm": "mrm --preset=@adonisjs/mrm-preset",
     "pretest": "npm run lint",
     "test": "node .bin/test.js",
     "lint": "eslint . --ext=.ts",
     "clean": "del build",
+    "copyfiles": "copyfiles \"templates/**/*.txt\" build",
     "compile": "npm run lint && npm run clean && tsc",
-    "build": "npm run compile",
+    "build": "npm run compile && npm run copyfiles",
     "prepublishOnly": "npm run build",
     "format": "prettier --write .",
     "commit": "git-cz",
@@ -38,6 +45,7 @@
     "@adonisjs/require-ts": "^2.0.8",
     "@types/node": "^17.0.0",
     "commitizen": "^4.2.4",
+    "copyfiles": "^2.4.1",
     "cz-conventional-changelog": "^3.3.0",
     "del-cli": "^4.0.1",
     "eslint": "^8.5.0",
@@ -71,11 +79,6 @@
   "eslintIgnore": [
     "build"
   ],
-  "files": [
-    "build/src",
-    "build/index.d.ts",
-    "build/index.js"
-  ],
   "prettier": {
     "trailingComma": "es5",
     "semi": false,
@@ -94,5 +97,16 @@
   "np": {
     "contents": ".",
     "anyBranch": false
+  },
+  "adonisjs": {
+    "types": "adonis5-prometheus",
+    "providers": [
+      "adonis5-prometheus"
+    ],
+    "templates": {
+      "config": [
+        "prometheus.txt"
+      ]
+    }
   }
 }
