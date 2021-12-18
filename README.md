@@ -1,9 +1,9 @@
-# adonis5-prometheus
-> Tagline
-
-[![npm-image]][npm-url] [![license-image]][license-url] [![typescript-image]][typescript-url]
-
-A short brief
+<div align="center">
+  <img src="https://i.imgur.com/QZf8jrj.png" width="300px" />  
+  <br/>
+  <h3>Adonis5-Prometheus</h3>
+  <p>Simple Prometheus Wrapper for Adonis</p>
+</div>
 
 ## Installation
 
