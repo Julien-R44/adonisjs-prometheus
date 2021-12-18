@@ -21,7 +21,7 @@
     "build": "npm run compile && npm run copyfiles",
     "prepublishOnly": "npm run build",
     "format": "prettier --write .",
-    "release": "np --message=\"chore(release): %s\"",
+    "release": "np --message=\"🔖 %s\"",
     "version": "npm run build",
     "sync-labels": "github-label-sync --labels ./node_modules/@adonisjs/mrm-preset/gh-labels.json Julien-R44/adonis5-prometheus"
   },
