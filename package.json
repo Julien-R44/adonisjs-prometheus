@@ -21,7 +21,6 @@
     "build": "npm run compile && npm run copyfiles",
     "prepublishOnly": "npm run build",
     "format": "prettier --write .",
-    "commit": "git-cz",
     "release": "np --message=\"chore(release): %s\"",
     "version": "npm run build",
     "sync-labels": "github-label-sync --labels ./node_modules/@adonisjs/mrm-preset/gh-labels.json Julien-R44/adonis5-prometheus"
@@ -46,7 +45,6 @@
     "@types/node": "^17.0.0",
     "commitizen": "^4.2.4",
     "copyfiles": "^2.4.1",
-    "cz-conventional-changelog": "^3.3.0",
     "del-cli": "^4.0.1",
     "eslint": "^8.5.0",
     "eslint-config-prettier": "^8.3.0",
