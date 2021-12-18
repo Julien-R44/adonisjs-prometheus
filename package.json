@@ -1,0 +1,98 @@
+{
+  "name": "adonis5-prometheus",
+  "version": "0.0.1",
+  "description": "Prometheus wrapper for Adonis 5",
+  "main": "build/providers/PrometheusProvider.js",
+  "typings": "./build/adonis-typings/index.d.ts",
+  "scripts": {
+    "mrm": "mrm --preset=@adonisjs/mrm-preset",
+    "pretest": "npm run lint",
+    "test": "node .bin/test.js",
+    "lint": "eslint . --ext=.ts",
+    "clean": "del build",
+    "compile": "npm run lint && npm run clean && tsc",
+    "build": "npm run compile",
+    "prepublishOnly": "npm run build",
+    "format": "prettier --write .",
+    "commit": "git-cz",
+    "release": "np --message=\"chore(release): %s\"",
+    "version": "npm run build",
+    "sync-labels": "github-label-sync --labels ./node_modules/@adonisjs/mrm-preset/gh-labels.json Julien-R44/adonis5-prometheus"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Julien-R44/adonis5-prometheus.git"
+  },
+  "author": "Julien Ripouteau <julien@ripouteau.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Julien-R44/adonis5-prometheus/issues"
+  },
+  "homepage": "https://github.com/Julien-R44/adonis5-prometheus#readme",
+  "dependencies": {
+    "prom-client": "^14.0.1"
+  },
+  "devDependencies": {
+    "@adonisjs/core": "^5.4.2",
+    "@adonisjs/mrm-preset": "^5.0.2",
+    "@adonisjs/require-ts": "^2.0.8",
+    "@types/node": "^17.0.0",
+    "commitizen": "^4.2.4",
+    "cz-conventional-changelog": "^3.3.0",
+    "del-cli": "^4.0.1",
+    "eslint": "^8.5.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-adonis": "^2.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "github-label-sync": "^2.0.2",
+    "japa": "^4.0.0",
+    "mrm": "^3.0.10",
+    "np": "^7.6.0",
+    "prettier": "^2.5.1",
+    "typescript": "^4.5.4"
+  },
+  "eslintConfig": {
+    "extends": [
+      "plugin:adonis/typescriptPackage",
+      "prettier"
+    ],
+    "plugins": [
+      "prettier"
+    ],
+    "rules": {
+      "prettier/prettier": [
+        "error",
+        {
+          "endOfLine": "auto"
+        }
+      ]
+    }
+  },
+  "eslintIgnore": [
+    "build"
+  ],
+  "files": [
+    "build/src",
+    "build/index.d.ts",
+    "build/index.js"
+  ],
+  "prettier": {
+    "trailingComma": "es5",
+    "semi": false,
+    "singleQuote": true,
+    "useTabs": false,
+    "quoteProps": "consistent",
+    "bracketSpacing": true,
+    "arrowParens": "always",
+    "printWidth": 100
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "np": {
+    "contents": ".",
+    "anyBranch": false
+  }
+}
