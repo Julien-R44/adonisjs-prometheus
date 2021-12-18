@@ -8,23 +8,17 @@ export default class PrometheusProvider {
   public register(): void {
     const Config = this.app.container.resolveBinding('Adonis/Core/Config')
 
-    this.app.container.singleton('Adonis/Prometheus', () => {
-      const systemMetrics = Config.get('prometheus.systemMetrics')
-
-      if (systemMetrics.enabled) {
-        const { enabled, ...params } = systemMetrics
-        prometheus.collectDefaultMetrics(params)
-      }
-      return prometheus
-    })
+    const systemMetrics = Config.get('prometheus.systemMetrics')
+    if (Config.get('prometheus.systemMetrics').enabled) {
+      const { enabled, ...params } = systemMetrics
+      prometheus.collectDefaultMetrics(params)
+    }
 
     if (Config.get('prometheus.exposeHttpEndpoint')) {
       this.exposeMetrics(Config.get('prometheus.endpoint'))
     }
 
-    // this.app.container.bind('Adonis/Prometheus/Middlewares/CollectPerformanceMetrics', () => {
-    //   const CollectPerformanceMetric = require('../src/Middlewares/CollectPerformanceMetric')
-    // })
+    this.app.container.singleton('Adonis/Prometheus', () => prometheus)
   }
 
   private exposeMetrics(urlPath: string = '/metrics') {

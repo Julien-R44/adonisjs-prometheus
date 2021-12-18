@@ -6,8 +6,16 @@
 </div>
 
 ## Installation
+```
+npm i adonis5-prometheus
+node ace configure adonis5-prometheus
+```
 
 ## Usage
+
+A configuration file has been added in `config/prometheus.ts`.
+
+By default the system metrics are collected ( `systemMetrics.enabled: true` ), so now you can call the endpoint {{host}}/metrics to get the measured metrics.
 
 [npm-image]: https://img.shields.io/npm/v/adonis5-prometheus.svg?style=for-the-badge&logo=npm
 [npm-url]: https://npmjs.org/package/adonis5-prometheus "npm"

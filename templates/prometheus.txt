@@ -21,7 +21,7 @@ export default {
   | Collect overall performance metrics of the entire application.
   */
   systemMetrics: {
-    enabled: false,
+    enabled: true,
     prefix: '',
   },
 
