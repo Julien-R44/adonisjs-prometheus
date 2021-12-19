@@ -3,7 +3,9 @@
   <br/>
   <h3>Adonis5-Prometheus</h3>
   <p>Simple Prometheus Wrapper for Adonis</p>
-  <img src="https://img.shields.io/npm/v/adonis5-prometheus.svg?style=for-the-badge&logo=npm" />
+  <a href="https://www.npmjs.com/package/adonis5-prometheus">
+    <img src="https://img.shields.io/npm/v/adonis5-prometheus.svg?style=for-the-badge&logo=npm" />
+  </a>
   <img src="https://img.shields.io/npm/l/adonis5-prometheus?color=blueviolet&style=for-the-badge" />
   <img src="https://img.shields.io/badge/Typescript-294E80.svg?style=for-the-badge&logo=typescript" />
 </div>
