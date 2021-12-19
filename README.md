@@ -76,6 +76,20 @@ When hitting `{{host}}/metrics` you will now get the following:
 sent_orders 2
 ```
 
+## Grafana Dashboard
+A basic ready to use dashboard is available in the `grafana` folder.
+![https://i.imgur.com/mD0UMhA.png?1](https://i.imgur.com/mD0UMhA.png?1)
+It includes :
+- Process CPU usage
+- Event loop lag
+- Node.JS version
+- Requests by second
+- Request volume rate by URL
+- Average response time
+- Response error rate by URL
+
+To be fully functional, you need to enable `systemMetrics`, `httpMetric` and `throughputMetric` in the `config/prometheus.ts` file.
+
 ## Documentation
 This library is a wrapper for prom-client. The prom-client object can be imported with `import Prometheus from '@ioc:Adonis/Prometheus`. Check out the [documentation](https://github.com/siimon/prom-client) for more information.
 
