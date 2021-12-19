@@ -67,7 +67,7 @@ const prometheusConfig {
   | Measures throughput for every request received into the application.
   */
   throughputMetric: {
-    enabled: false,
+    enabled: true,
     name: 'adonis_throughput_metrics',
     help: 'No. of request handled.',
     prefix: '',
