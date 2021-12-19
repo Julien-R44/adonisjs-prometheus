@@ -1,4 +1,4 @@
-const prometheusConfig {
+const prometheusConfig = {
   /*
   |--------------------------------------------------------------------------
   | Expose prometheus metrics via HTTP endpoint.
