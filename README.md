@@ -38,4 +38,4 @@ Server.middleware.register([
 ```
 
 ## Acknowledgments
-- [tnkemdilim/adonis-prometheus](https://github.com/tnkemdilim/adonis-prometheus) - basically I just adapted his library to support Adonis5.
+- [tnkemdilim/adonis-prometheus](https://github.com/tnkemdilim/adonis-prometheus) - At first, I just adapted his library to support Adonis5.
