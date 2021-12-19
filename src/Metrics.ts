@@ -1,19 +1,24 @@
-import Prometheus from '@ioc:Adonis/Prometheus'
-import Config from '@ioc:Adonis/Core/Config'
+import * as prometheus from 'prom-client'
 
-export default {
-  /**
-   * Total time each HTTP request takes.
-   */
-  httpMetric: new Prometheus.Histogram(Config.get('prometheus.httpMetric')),
+export default class Metrics {
+  public httpMetric: prometheus.Histogram<string>
+  public uptimeMetric: prometheus.Gauge<string>
+  public throughputMetric: prometheus.Counter<string>
 
-  /**
-   * Uptime performance of the application.
-   */
-  uptimeMetric: new Prometheus.Gauge(Config.get('prometheus.uptimeMetric')),
+  constructor(protected config: any) {
+    /**
+     * Total time each HTTP request takes.
+     */
+    this.httpMetric = new prometheus.Histogram(config.httpMetric)
 
-  /**
-   * No. of request handled.
-   */
-  throughputMetric: new Prometheus.Counter(Config.get('prometheus.throughputMetric')),
+    /**
+     * Uptime performance of the application.
+     */
+    this.uptimeMetric = new prometheus.Gauge(config.uptimeMetric)
+
+    /**
+     * No. of request handled.
+     */
+    this.throughputMetric = new prometheus.Counter(config.throughputMetric)
+  }
 }

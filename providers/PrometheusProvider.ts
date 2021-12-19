@@ -1,9 +1,13 @@
-import { ApplicationContract } from '@ioc:Adonis/Core/Application'
+import { ApplicationContract, IocContract } from '@ioc:Adonis/Core/Application'
 import * as prometheus from 'prom-client'
 
 export default class PrometheusProvider {
   public static needsApplication = true
-  constructor(protected app: ApplicationContract) {}
+  protected container: IocContract
+
+  constructor(protected app: ApplicationContract) {
+    this.container = app.container
+  }
 
   public register(): void {
     const Config = this.app.container.resolveBinding('Adonis/Core/Config')
@@ -19,6 +23,11 @@ export default class PrometheusProvider {
     }
 
     this.app.container.singleton('Adonis/Prometheus', () => prometheus)
+    this.app.container.singleton('Adonis/Prometheus/Middlewares/CollectPerformanceMetrics', () => {
+      const { CollectPerformanceMetrics } = require('../src/CollectPerformanceMetrics')
+      const config = this.container.use('Adonis/Core/Config')
+      return new CollectPerformanceMetrics(config.get('prometheus'))
+    })
   }
 
   private exposeMetrics(urlPath: string = '/metrics') {
@@ -29,17 +38,5 @@ export default class PrometheusProvider {
         .header('Content-type', prometheus.register.contentType)
         .ok(await prometheus.register.metrics())
     })
-  }
-
-  public async boot() {
-    // All bindings are ready, feel free to use them
-  }
-
-  public async ready() {
-    // App is ready
-  }
-
-  public async shutdown() {
-    // Cleanup, since app is going down
   }
 }
