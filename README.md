@@ -19,3 +19,23 @@ node ace configure adonis5-prometheus
 A configuration file has been added in `config/prometheus.ts`.
 
 By default the system metrics are collected ( `systemMetrics.enabled: true` ), so now you can call the endpoint `{{host}}/metrics` to get the measured metrics.
+
+## Built-in Metrics
+There currently exists built-ins metrics such as:
+- HTTP Metric: Total time each HTTP request takes.
+- Uptime Metric: Uptime performance of the application.
+- Throughput metric: No. of request handled.
+
+to enable them, simply register the `CollectPerformanceMetrics` as the first item in the start/kernel.ts:
+
+```
+Server.middleware.register([
+  // Make it first in the list for reliable metrics.
+  () => import('@ioc:Adonis/Prometheus/Middlewares/CollectPerformanceMetrics'),
+  () => import('@ioc:Adonis/Core/BodyParser'),
+  ...
+])
+```
+
+## Acknowledgments
+- [tnkemdilim/adonis-prometheus](https://github.com/tnkemdilim/adonis-prometheus) - basically I just adapted his library to support Adonis5.
