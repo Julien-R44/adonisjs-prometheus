@@ -35,7 +35,8 @@ export default {
   httpMetric: {
     enabled: true,
     name: 'adonis_http_request_durations',
-    includeQueryParams: true,
+    includeQueryParams: false,
+    includeRouteParams: false,
     help: 'Total time each HTTP request takes.',
     labelNames: ['method', 'url', 'statusCode'],
     buckets: [0.003, 0.03, 0.1, 0.3, 1.5, 10],
