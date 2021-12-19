@@ -25,8 +25,16 @@ export default class PrometheusProvider {
     this.app.container.singleton('Adonis/Prometheus', () => prometheus)
     this.app.container.singleton('Adonis/Prometheus/Middlewares/CollectPerformanceMetrics', () => {
       const { CollectPerformanceMetrics } = require('../src/CollectPerformanceMetrics')
-      const config = this.container.use('Adonis/Core/Config')
-      return new CollectPerformanceMetrics(config.get('prometheus'))
+      const { Metrics } = require('../src/Metrics')
+      const config = this.container.use('Adonis/Core/Config').get('prometheus')
+
+      const metrics = new Metrics(config)
+      const enableUptimeMetric = config.uptimeMetric.enabled
+      if (enableUptimeMetric) {
+        metrics.uptimeMetric.inc(1)
+      }
+
+      return new CollectPerformanceMetrics(metrics, config)
     })
   }
 

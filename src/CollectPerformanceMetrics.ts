@@ -1,12 +1,8 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Metrics from './Metrics'
+import { Metrics } from './Metrics'
 
 export class CollectPerformanceMetrics {
-  protected metrics: Metrics
-
-  constructor(protected config: any) {
-    this.metrics = new Metrics(config)
-  }
+  constructor(protected metrics: Metrics, protected config: any) {}
 
   public async handle({ request, response }: HttpContextContract, next: () => Promise<void>) {
     const { enabled: enableHttpMetric } = this.config.httpMetric

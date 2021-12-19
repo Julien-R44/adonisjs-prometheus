@@ -1,6 +1,6 @@
 import * as prometheus from 'prom-client'
 
-export default class Metrics {
+export class Metrics {
   public httpMetric: prometheus.Histogram<string>
   public uptimeMetric: prometheus.Gauge<string>
   public throughputMetric: prometheus.Counter<string>
