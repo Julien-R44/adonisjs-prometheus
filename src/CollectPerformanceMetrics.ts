@@ -62,7 +62,12 @@ export class CollectPerformanceMetrics {
      * End HTTP request timer.
      */
     if (httpMetricOptions.enabled && stopHttpRequestTimer) {
-      stopHttpRequestTimer({ statusCode })
+      let statusCodeStr = statusCode.toString()
+      if (httpMetricOptions.shouldGroupStatusCode) {
+        statusCodeStr = statusCodeStr[0] + 'xx'
+      }
+
+      stopHttpRequestTimer({ statusCode: statusCodeStr })
     }
   }
 }

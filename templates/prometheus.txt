@@ -1,4 +1,4 @@
-export default {
+const prometheusConfig {
   /*
   |--------------------------------------------------------------------------
   | Expose prometheus metrics via HTTP endpoint.
@@ -37,6 +37,7 @@ export default {
     name: 'adonis_http_request_durations',
     includeQueryParams: false,
     includeRouteParams: false,
+    shouldGroupStatusCode: true,
     help: 'Total time each HTTP request takes.',
     labelNames: ['method', 'url', 'statusCode'],
     buckets: [0.003, 0.03, 0.1, 0.3, 1.5, 10],
@@ -72,3 +73,5 @@ export default {
     prefix: '',
   },
 }
+
+export default prometheusConfig
