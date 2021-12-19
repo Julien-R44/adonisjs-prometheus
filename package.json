@@ -29,6 +29,13 @@
     "type": "git",
     "url": "git+https://github.com/Julien-R44/adonis5-prometheus.git"
   },
+  "keywords": [
+    "adonisjs",
+    "prometheus",
+    "adonis-prometheus",
+    "monitoring",
+    "grafana"
+  ],
   "author": "Julien Ripouteau <julien@ripouteau.com>",
   "license": "MIT",
   "bugs": {
