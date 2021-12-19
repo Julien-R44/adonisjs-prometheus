@@ -28,7 +28,7 @@ There currently exists built-ins metrics such as:
 
 To enable them, simply register the `CollectPerformanceMetrics` as the first item in the start/kernel.ts:
 
-```
+```typescript
 Server.middleware.register([
   // Make it first in the list for reliable metrics.
   () => import('@ioc:Adonis/Prometheus/Middlewares/CollectPerformanceMetrics'),
@@ -38,7 +38,7 @@ Server.middleware.register([
 ```
 
 ## Custom Metrics
-```
+```typescript
 // Register your custom metrics in the separate file you want.
 export const OrderMetric = new Prometheus.Counter({
   name: 'sent_orders',
@@ -46,7 +46,7 @@ export const OrderMetric = new Prometheus.Counter({
 })
 
 // OrderController.ts
-import { OrderMetric } from 'App/Metrics
+import { OrderMetric } from 'App/Metrics'
 
 export default class OrderController {
   public async store({ request }: HttpContextContract) {
@@ -57,13 +57,12 @@ export default class OrderController {
     // ...
   }
 }
-
-/*
-  When hitting `{{host}}/metrics` you will now get the following:
-  # HELP send_orders Total Orders Sent
-  # TYPE send_orders counter
-  sent_orders 2
-*/
+```
+When hitting `{{host}}/metrics` you will now get the following:
+```
+# HELP send_orders Total Orders Sent
+# TYPE send_orders counter
+sent_orders 2
 ```
 
 ## Documentation
