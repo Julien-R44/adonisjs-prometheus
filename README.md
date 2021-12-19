@@ -26,7 +26,7 @@ There currently exists built-ins metrics such as:
 - Uptime Metric: Uptime performance of the application.
 - Throughput metric: No. of request handled.
 
-to enable them, simply register the `CollectPerformanceMetrics` as the first item in the start/kernel.ts:
+To enable them, simply register the `CollectPerformanceMetrics` as the first item in the start/kernel.ts:
 
 ```
 Server.middleware.register([
@@ -36,6 +36,38 @@ Server.middleware.register([
   ...
 ])
 ```
+
+## Custom Metrics
+```
+// Register your custom metrics in the separate file you want.
+export const OrderMetric = new Prometheus.Counter({
+  name: 'sent_orders',
+  help: 'Total Orders Sent',
+})
+
+// OrderController.ts
+import { OrderMetric } from 'App/Metrics
+
+export default class OrderController {
+  public async store({ request }: HttpContextContract) {
+    const order = await request.validate({ schema: OrderSchema })
+
+    // ...
+    OrderMetric.inc()
+    // ...
+  }
+}
+
+/*
+  When hitting `{{host}}/metrics` you will now get the following:
+  # HELP send_orders Total Orders Sent
+  # TYPE send_orders counter
+  sent_orders 2
+*/
+```
+
+## Documentation
+This library is a wrapper for prom-client. The prom-client object can be imported with `import Prometheus from '@ioc:Adonis/Prometheus`. Check out the [documentation](https://github.com/siimon/prom-client) for more information.
 
 ## Acknowledgments
 - [tnkemdilim/adonis-prometheus](https://github.com/tnkemdilim/adonis-prometheus) - At first, I just adapted his library to support Adonis5.
