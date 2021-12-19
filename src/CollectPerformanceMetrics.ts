@@ -15,20 +15,23 @@ export class CollectPerformanceMetrics {
      * Start HTTP request timer.
      */
     let stopHttpRequestTimer
-    if (httpMetricOptions.enableHttpMetric) {
+    if (httpMetricOptions.enabled) {
       const includeRouteParams = httpMetricOptions.includeRouteParams
       const includeQueryParams = httpMetricOptions.includeQueryParams
+      const excludedRoutes = httpMetricOptions.excludedRoutes || []
 
-      let url = includeRouteParams ? route?.pattern : request.url()
+      if (!excludedRoutes.includes(route?.pattern)) {
+        let url = includeRouteParams ? request.url() : route?.pattern
 
-      if (includeQueryParams) {
-        url += `?${request.parsedUrl.query}`
+        if (includeQueryParams && request.parsedUrl.query) {
+          url += `?${request.parsedUrl.query}`
+        }
+
+        stopHttpRequestTimer = this.metrics.httpMetric.startTimer({
+          method: request.method(),
+          url,
+        })
       }
-
-      stopHttpRequestTimer = this.metrics.httpMetric.startTimer({
-        method: request.method(),
-        url,
-      })
     }
 
     /**
@@ -44,7 +47,7 @@ export class CollectPerformanceMetrics {
     /**
      * End HTTP request timer.
      */
-    if (enableHttpMetric) {
+    if (httpMetricOptions.enabled && stopHttpRequestTimer) {
       stopHttpRequestTimer({
         statusCode: response.response.statusCode,
       })
