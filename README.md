@@ -22,6 +22,15 @@ A configuration file has been added in `config/prometheus.ts`.
 
 By default the system metrics are collected ( `systemMetrics.enabled: true` ), so now you can call the endpoint `{{host}}/metrics` to get the measured metrics.
 
+Here is an example scrape_config to add to prometheus.yml:
+```
+scrape_configs:
+  - job_name: 'my-adonis-app'
+    static_configs:
+      - targets: ['my-adonis-app.com:3333']
+    scrape_interval: 5s
+```
+
 ## Built-in Metrics
 There currently exists built-ins metrics such as:
 - HTTP Metric: Total time each HTTP request takes.
