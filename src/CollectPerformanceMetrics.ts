@@ -9,10 +9,11 @@ export class CollectPerformanceMetrics {
     next: () => Promise<void>
   ) {
     const httpMetricOptions = this.config.httpMetric
-    const enableThroughputMetric = this.config.throughputMetric.enabled
 
     /**
-     * Start HTTP request timer.
+     * Start HTTP request timer ( if route not excluded ) with the
+     * given options for url parsing.
+     * The timer will be stopped when the request is finished.
      */
     let stopHttpRequestTimer
     if (httpMetricOptions.enabled) {
@@ -35,9 +36,22 @@ export class CollectPerformanceMetrics {
     }
 
     /**
-     * Continue execution.
+     * Execute request and track metrics for the request.
+     * If the request fails with any error, we have to catch
+     * this errror, track metricks, then rethrow the error.
      */
-    await next()
+    try {
+      await next()
+      this.afterRequest(response.response.statusCode, stopHttpRequestTimer)
+    } catch (err) {
+      this.afterRequest(err.status || 500, stopHttpRequestTimer)
+      throw err
+    }
+  }
+
+  private async afterRequest(statusCode: number, stopHttpRequestTimer) {
+    const enableThroughputMetric = this.config.throughputMetric.enabled
+    const httpMetricOptions = this.config.httpMetric
 
     /**
      * Track request throughput..
@@ -48,9 +62,7 @@ export class CollectPerformanceMetrics {
      * End HTTP request timer.
      */
     if (httpMetricOptions.enabled && stopHttpRequestTimer) {
-      stopHttpRequestTimer({
-        statusCode: response.response.statusCode,
-      })
+      stopHttpRequestTimer({ statusCode })
     }
   }
 }
