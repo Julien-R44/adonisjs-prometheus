@@ -27,7 +27,7 @@ Here is an example scrape_config to add to prometheus.yml:
 scrape_configs:
   - job_name: 'my-adonis-app'
     static_configs:
-      - targets: ['my-adonis-app.com:3333']
+      - targets: ['my-adonis-app.com']
     scrape_interval: 5s
 ```
 
