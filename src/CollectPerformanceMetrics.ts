@@ -19,7 +19,7 @@ export class CollectPerformanceMetrics {
       const includeRouteParams = httpMetricOptions.includeRouteParams
       const includeQueryParams = httpMetricOptions.includeQueryParams
 
-      if (this.isRouteExcluded(ctx)) {
+      if (!this.isRouteExcluded(ctx)) {
         let url = includeRouteParams ? request.url() : route?.pattern
 
         if (includeQueryParams && request.parsedUrl.query) {
