@@ -21,7 +21,7 @@ declare module '@ioc:Adonis/Prometheus' {
       labelNames: string[]
       buckets: number[]
       prefix: string
-      excludedRoutes: string[]
+      excludedRoutes: string[] | ((ctx: HttpContextContract) => boolean)
     }
 
     uptimeMetric: {

@@ -1,13 +1,12 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { PrometheusConfig } from '@ioc:Adonis/Prometheus'
 import { Metrics } from './Metrics'
 
 export class CollectPerformanceMetrics {
-  constructor(protected metrics: Metrics, protected config: any) {}
+  constructor(protected metrics: Metrics, protected config: PrometheusConfig) {}
 
-  public async handle(
-    { request, response, route }: HttpContextContract,
-    next: () => Promise<void>
-  ) {
+  public async handle(ctx: HttpContextContract, next: () => Promise<void>) {
+    const { request, response, route } = ctx
     const httpMetricOptions = this.config.httpMetric
 
     /**
@@ -19,9 +18,8 @@ export class CollectPerformanceMetrics {
     if (httpMetricOptions.enabled) {
       const includeRouteParams = httpMetricOptions.includeRouteParams
       const includeQueryParams = httpMetricOptions.includeQueryParams
-      const excludedRoutes = httpMetricOptions.excludedRoutes || []
 
-      if (!excludedRoutes.includes(route?.pattern)) {
+      if (this.isRouteExcluded(ctx)) {
         let url = includeRouteParams ? request.url() : route?.pattern
 
         if (includeQueryParams && request.parsedUrl.query) {
@@ -38,7 +36,7 @@ export class CollectPerformanceMetrics {
     /**
      * Execute request and track metrics for the request.
      * If the request fails with any error, we have to catch
-     * this errror, track metricks, then rethrow the error.
+     * this error, track metrics, then rethrow the error.
      */
     try {
       await next()
@@ -69,5 +67,18 @@ export class CollectPerformanceMetrics {
 
       stopHttpRequestTimer({ statusCode: statusCodeStr })
     }
+  }
+
+  /**
+   * Check if current route is excluded by the user in the configuration
+   */
+  private isRouteExcluded(ctx: HttpContextContract): boolean {
+    const excludedRoutes = this.config.httpMetric.excludedRoutes || []
+
+    if (typeof excludedRoutes === 'function') {
+      return excludedRoutes(ctx)
+    }
+
+    return excludedRoutes.includes(ctx.route!.pattern)
   }
 }
