@@ -23,7 +23,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 1,
-  "iteration": 1639916333187,
+  "iteration": 1641233769097,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -34,7 +34,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "hjfMCOo7k"
+        "uid": "${DS_PROMETHEUS}"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -75,6 +75,10 @@
       "steppedLine": false,
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "expr": "irate(process_cpu_user_seconds_total{instance=~\"$instance\"}[2m]) * 100",
           "format": "time_series",
           "interval": "",
@@ -83,6 +87,10 @@
           "refId": "A"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "expr": "irate(process_cpu_system_seconds_total{instance=~\"$instance\"}[2m]) * 100",
           "format": "time_series",
           "intervalFactor": 1,
@@ -127,7 +135,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "hjfMCOo7k"
+        "uid": "${DS_PROMETHEUS}"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -168,6 +176,10 @@
       "steppedLine": false,
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "expr": "nodejs_eventloop_lag_seconds{instance=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
@@ -206,6 +218,10 @@
       }
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -268,7 +284,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "hjfMCOo7k"
+            "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
           "expr": "sum(nodejs_version_info{instance=~\"$instance\"}) by (version)",
@@ -284,6 +300,10 @@
       "type": "stat"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -356,7 +376,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "hjfMCOo7k"
+            "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
           "expr": "rate(adonis_throughput_metrics[1m])",
@@ -369,6 +389,10 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -441,7 +465,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "hjfMCOo7k"
+            "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
           "expr": "sum by (url) (rate(adonis_http_request_durations_count[1m]))",
@@ -454,6 +478,10 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -526,7 +554,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "hjfMCOo7k"
+            "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
           "expr": "sum(rate(adonis_http_request_durations_sum[5m]) / rate(adonis_http_request_durations_count[5m]))",
@@ -539,6 +567,10 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -610,7 +642,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "hjfMCOo7k"
+            "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
           "expr": "sum by (statusCode, url, method) (rate(adonis_http_request_durations_count[5m]))",
@@ -639,7 +671,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "hjfMCOo7k"
+          "uid": "${DS_PROMETHEUS}"
         },
         "definition": "label_values(nodejs_version_info, instance)",
         "hide": 0,
@@ -660,6 +692,24 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "Prometheus",
+          "value": "Prometheus"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "datasource",
+        "multi": false,
+        "name": "DS_PROMETHEUS",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
       }
     ]
   },
@@ -684,6 +734,6 @@
   "timezone": "",
   "title": "Adonis",
   "uid": "Gtxa6Oo7k",
-  "version": 3,
+  "version": 6,
   "weekStart": ""
 }
