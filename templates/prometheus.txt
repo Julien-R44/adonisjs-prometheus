@@ -1,4 +1,6 @@
-const prometheusConfig = {
+import { PrometheusConfig } from '@ioc:Adonis/Prometheus'
+
+const prometheusConfig: PrometheusConfig = {
   /*
   |--------------------------------------------------------------------------
   | Expose prometheus metrics via HTTP endpoint.
@@ -42,7 +44,7 @@ const prometheusConfig = {
     labelNames: ['method', 'url', 'statusCode'],
     buckets: [0.003, 0.03, 0.1, 0.3, 1.5, 10],
     prefix: '',
-    excludedRoutes: ["/metrics", "/health"],
+    excludedRoutes: ['/metrics', '/health'],
   },
 
   /*
