@@ -1,6 +1,6 @@
 {
   "name": "adonis5-prometheus",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Prometheus wrapper for Adonis 5",
   "main": "build/providers/PrometheusProvider.js",
   "typings": "./build/adonis-typings/index.d.ts",
