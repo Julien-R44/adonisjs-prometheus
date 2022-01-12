@@ -80,6 +80,7 @@ sent_orders 2
 
 ## Grafana Dashboard
 A basic ready to use dashboard is available in the `grafana` folder.
+**Grafana 8 is required** to be able to import the dashboard correctly, otherwise you'll have to tinker a bit to make it work.
 ![https://i.imgur.com/mD0UMhA.png?1](https://i.imgur.com/mD0UMhA.png?1)
 It includes :
 - Process CPU usage
