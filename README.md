@@ -95,6 +95,3 @@ To be fully functional, you need to enable `systemMetrics`, `httpMetric` and `th
 
 ## Documentation
 This library is a wrapper for prom-client. The prom-client object can be imported with `import Prometheus from '@ioc:Adonis/Prometheus'`. Check out the [documentation](https://github.com/siimon/prom-client) for more information.
-
-## Acknowledgments
-- [tnkemdilim/adonis-prometheus](https://github.com/tnkemdilim/adonis-prometheus) - At first, I just adapted his library to support Adonis5.
