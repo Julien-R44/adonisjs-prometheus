@@ -1,6 +1,7 @@
 {
   "name": "adonis5-prometheus",
   "version": "0.0.6",
+  "packageManager": "pnpm@7.9.5",
   "description": "Prometheus wrapper for Adonis 5",
   "author": "Julien Ripouteau <julien@ripouteau.com>",
   "license": "MIT",
