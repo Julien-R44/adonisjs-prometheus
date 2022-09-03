@@ -1,5 +1,6 @@
 import * as prometheus from 'prom-client'
 import type { ApplicationContract, IocContract } from '@ioc:Adonis/Core/Application'
+import type { ConfigContract } from '@ioc:Adonis/Core/Config'
 
 export default class PrometheusProvider {
   public static needsApplication = true
@@ -9,17 +10,39 @@ export default class PrometheusProvider {
     this.container = app.container
   }
 
+  /**
+   * Expose metrics on the given endpoint
+   */
+  private exposeMetricsEndpoint(Config: ConfigContract) {
+    if (Config.get('prometheus.exposeHttpEndpoint') === false) {
+      return
+    }
+
+    const router = this.app.container.resolveBinding('Adonis/Core/Route')
+    const urlPath = Config.get('prometheus.endpoint') || '/metrics'
+
+    router.get(urlPath, async ({ response }) => {
+      response
+        .header('Content-type', prometheus.register.contentType)
+        .ok(await prometheus.register.metrics())
+    })
+  }
+
+  /**
+   * Collect system metrics if enabled
+   */
+  private collectSystemMetrics(Config: ConfigContract) {
+    const systemMetrics = Config.get('prometheus.systemMetrics')
+    if (systemMetrics.enabled) {
+      prometheus.collectDefaultMetrics(systemMetrics)
+    }
+  }
+
   public register(): void {
     const Config = this.app.container.resolveBinding('Adonis/Core/Config')
 
-    const systemMetrics = Config.get('prometheus.systemMetrics')
-    if (Config.get('prometheus.systemMetrics').enabled) {
-      prometheus.collectDefaultMetrics(systemMetrics)
-    }
-
-    if (Config.get('prometheus.exposeHttpEndpoint')) {
-      this.exposeMetrics(Config.get('prometheus.endpoint'))
-    }
+    this.collectSystemMetrics(Config)
+    this.exposeMetricsEndpoint(Config)
 
     this.app.container.singleton('Adonis/Prometheus', () => prometheus)
     this.app.container.singleton('Adonis/Prometheus/Middlewares/CollectPerformanceMetrics', () => {
@@ -34,19 +57,6 @@ export default class PrometheusProvider {
       }
 
       return new CollectPerformanceMetrics(metrics, config)
-    })
-  }
-
-  /**
-   * Expose metrics on the given endpoint
-   */
-  private exposeMetrics(urlPath = '/metrics') {
-    const router = this.app.container.resolveBinding('Adonis/Core/Route')
-
-    router.get(urlPath, async ({ response }) => {
-      response
-        .header('Content-type', prometheus.register.contentType)
-        .ok(await prometheus.register.metrics())
     })
   }
 }
