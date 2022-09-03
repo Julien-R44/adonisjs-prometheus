@@ -34,12 +34,12 @@
     "lint": "eslint .",
     "clean": "del-cli build",
     "copyfiles": "copyfiles \"templates/**/*.txt\" build",
-    "compile": "npm run lint && npm run clean && tsc",
-    "build": "npm run compile && npm run copyfiles",
-    "prepublishOnly": "npm run build",
+    "compile": "pnpm lint && pnpm clean && tsc",
+    "build": "pnpm compile && pnpm copyfiles",
+    "prepublishOnly": "pnpm build",
     "format": "prettier --write .",
-    "release": "np --message=\"🔖 %s\"",
-    "version": "npm run build",
+    "release": "bumpp --commit --push --tag && pnpm publish",
+    "version": "pnpm build",
     "sync-labels": "github-label-sync --labels ./node_modules/@adonisjs/mrm-preset/gh-labels.json Julien-R44/adonis5-prometheus"
   },
   "peerDependencies": {
@@ -59,6 +59,7 @@
     "@japa/spec-reporter": "^1.2.0",
     "@julr/eslint-config": "^0.3.2",
     "@types/node": "^18.7.14",
+    "bumpp": "^8.2.1",
     "commitizen": "^4.2.5",
     "copyfiles": "^2.4.1",
     "del-cli": "^5.0.0",
@@ -67,7 +68,6 @@
     "japa": "^4.0.0",
     "mrm": "^4.1.0",
     "nodemon": "^2.0.19",
-    "np": "^7.6.2",
     "prettier": "^2.7.1",
     "typescript": "^4.8.2"
   },
