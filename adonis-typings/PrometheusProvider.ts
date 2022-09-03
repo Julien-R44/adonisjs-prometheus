@@ -1,6 +1,6 @@
 declare module '@ioc:Adonis/Prometheus/Middlewares/CollectPerformanceMetrics' {
-  import { ApplicationContract } from '@ioc:Adonis/Core/Application'
-  import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+  import type { ApplicationContract } from '@ioc:Adonis/Core/Application'
+  import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
   export interface MiddlewareContract {
     new (application: ApplicationContract): {

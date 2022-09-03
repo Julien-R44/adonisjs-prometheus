@@ -25,9 +25,9 @@ By default the system metrics are collected ( `systemMetrics.enabled: true` ), s
 Here is an example scrape_config to add to prometheus.yml:
 ```yaml
 scrape_configs:
-  - job_name: 'my-adonis-app'
+  - job_name: my-adonis-app
     static_configs:
-      - targets: ['my-adonis-app.com']
+      - targets: [my-adonis-app.com]
     scrape_interval: 5s
 ```
 

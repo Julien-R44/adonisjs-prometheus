@@ -1,5 +1,5 @@
-import { ApplicationContract, IocContract } from '@ioc:Adonis/Core/Application'
 import * as prometheus from 'prom-client'
+import type { ApplicationContract, IocContract } from '@ioc:Adonis/Core/Application'
 
 export default class PrometheusProvider {
   public static needsApplication = true
@@ -14,8 +14,7 @@ export default class PrometheusProvider {
 
     const systemMetrics = Config.get('prometheus.systemMetrics')
     if (Config.get('prometheus.systemMetrics').enabled) {
-      const { enabled, ...params } = systemMetrics
-      prometheus.collectDefaultMetrics(params)
+      prometheus.collectDefaultMetrics(systemMetrics)
     }
 
     if (Config.get('prometheus.exposeHttpEndpoint')) {
@@ -38,7 +37,10 @@ export default class PrometheusProvider {
     })
   }
 
-  private exposeMetrics(urlPath: string = '/metrics') {
+  /**
+   * Expose metrics on the given endpoint
+   */
+  private exposeMetrics(urlPath = '/metrics') {
     const router = this.app.container.resolveBinding('Adonis/Core/Route')
 
     router.get(urlPath, async ({ response }) => {

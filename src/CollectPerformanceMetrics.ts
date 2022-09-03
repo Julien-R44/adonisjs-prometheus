@@ -1,6 +1,6 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { PrometheusConfig } from '@ioc:Adonis/Prometheus'
-import { Metrics } from './Metrics'
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import type { PrometheusConfig } from '@ioc:Adonis/Prometheus'
+import type { Metrics } from './Metrics'
 
 export class CollectPerformanceMetrics {
   constructor(protected metrics: Metrics, protected config: PrometheusConfig) {}
@@ -62,7 +62,7 @@ export class CollectPerformanceMetrics {
     if (httpMetricOptions.enabled && stopHttpRequestTimer) {
       let statusCodeStr = statusCode.toString()
       if (httpMetricOptions.shouldGroupStatusCode) {
-        statusCodeStr = statusCodeStr[0] + 'xx'
+        statusCodeStr = `${statusCodeStr[0]}xx`
       }
 
       stopHttpRequestTimer({ statusCode: statusCodeStr })

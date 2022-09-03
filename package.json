@@ -2,6 +2,24 @@
   "name": "adonis5-prometheus",
   "version": "0.0.6",
   "description": "Prometheus wrapper for Adonis 5",
+  "author": "Julien Ripouteau <julien@ripouteau.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/Julien-R44/adonis5-prometheus#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Julien-R44/adonis5-prometheus.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Julien-R44/adonis5-prometheus/issues"
+  },
+  "keywords": [
+    "adonisjs",
+    "adonis",
+    "prometheus",
+    "adonis-prometheus",
+    "monitoring",
+    "grafana"
+  ],
   "main": "build/providers/PrometheusProvider.js",
   "typings": "./build/adonis-typings/index.d.ts",
   "files": [
@@ -14,7 +32,7 @@
     "mrm": "mrm --preset=@adonisjs/mrm-preset",
     "pretest": "npm run lint",
     "test": "node .bin/test.js",
-    "lint": "eslint . --ext=.ts",
+    "lint": "eslint .",
     "clean": "del-cli build",
     "copyfiles": "copyfiles \"templates/**/*.txt\" build",
     "compile": "npm run lint && npm run clean && tsc",
@@ -25,66 +43,43 @@
     "version": "npm run build",
     "sync-labels": "github-label-sync --labels ./node_modules/@adonisjs/mrm-preset/gh-labels.json Julien-R44/adonis5-prometheus"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Julien-R44/adonis5-prometheus.git"
+  "peerDependencies": {
+    "@adonisjs/core": "^5.8.0"
   },
-  "keywords": [
-    "adonisjs",
-    "adonis",
-    "prometheus",
-    "adonis-prometheus",
-    "monitoring",
-    "grafana"
-  ],
-  "author": "Julien Ripouteau <julien@ripouteau.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Julien-R44/adonis5-prometheus/issues"
-  },
-  "homepage": "https://github.com/Julien-R44/adonis5-prometheus#readme",
   "dependencies": {
-    "prom-client": "^14.0.1"
+    "prom-client": "^14.1.0"
   },
   "devDependencies": {
-    "@adonisjs/core": "^5.4.2",
-    "@adonisjs/mrm-preset": "^5.0.2",
-    "@adonisjs/require-ts": "^2.0.8",
-    "@types/node": "^17.0.0",
-    "commitizen": "^4.2.4",
+    "@adonisjs/core": "^5.8.6",
+    "@adonisjs/mrm-preset": "^5.0.3",
+    "@adonisjs/require-ts": "^2.0.12",
+    "@julr/eslint-config": "^0.3.2",
+    "@types/node": "^18.7.14",
+    "commitizen": "^4.2.5",
     "copyfiles": "^2.4.1",
-    "del-cli": "^4.0.1",
-    "eslint": "^8.5.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-adonis": "^2.1.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "github-label-sync": "^2.0.2",
+    "del-cli": "^5.0.0",
+    "eslint": "^8.23.0",
+    "github-label-sync": "^2.2.0",
     "japa": "^4.0.0",
-    "mrm": "^3.0.10",
-    "np": "^7.6.0",
-    "prettier": "^2.5.1",
-    "typescript": "^4.5.4"
+    "mrm": "^4.1.0",
+    "np": "^7.6.2",
+    "prettier": "^2.7.1",
+    "typescript": "^4.8.2"
   },
-  "eslintConfig": {
-    "extends": [
-      "plugin:adonis/typescriptPackage",
-      "prettier"
-    ],
-    "plugins": [
-      "prettier"
-    ],
-    "rules": {
-      "prettier/prettier": [
-        "error",
-        {
-          "endOfLine": "auto"
-        }
-      ]
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": ["@babel/core"]
     }
   },
-  "eslintIgnore": [
-    "build"
-  ],
+  "eslintConfig": {
+    "ignorePatterns": [
+      "build"
+    ],
+    "extends": "@julr",
+    "rules": {
+      "@typescript-eslint/no-var-requires": "off"
+    }
+  },
   "prettier": {
     "trailingComma": "es5",
     "semi": false,

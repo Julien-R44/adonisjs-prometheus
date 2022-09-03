@@ -1,6 +1,6 @@
 declare module '@ioc:Adonis/Prometheus' {
   export * from 'prom-client'
-  import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+  import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
   export interface PrometheusConfig {
     exposeHttpEndpoint: boolean
