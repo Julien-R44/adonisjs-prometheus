@@ -1,5 +1,8 @@
 {
   "extends": "./node_modules/@adonisjs/mrm-preset/_tsconfig",
+  "ts-node": {
+    "transpileOnly": true
+  },
   "compilerOptions": {
     "esModuleInterop": true,
     "experimentalDecorators": true,
