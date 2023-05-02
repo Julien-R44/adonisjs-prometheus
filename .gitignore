@@ -1,6 +1,5 @@
 node_modules
 coverage
-test/__app
 .DS_STORE
 .nyc_output
 .idea
@@ -10,4 +9,8 @@ test/__app
 *.log
 build
 dist
+yarn.lock
 shrinkwrap.yaml
+package-lock.json
+test/__app
+test/tmp

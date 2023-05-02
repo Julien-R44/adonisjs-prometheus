@@ -1,16 +1,17 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import type { PrometheusConfig } from '@ioc:Adonis/Prometheus'
-import type { Metrics } from './Metrics'
+import type { NextFn } from '@adonisjs/core/types/http'
+import type { HttpContext } from '@adonisjs/core/http'
+import type { Metrics } from './metrics.js'
+import type { PrometheusConfig } from './types.js'
 
 type MetricStartTimerReturn = ReturnType<Metrics['httpMetric']['startTimer']>
 
-export class CollectPerformanceMetrics {
+export default class CollectMetricsMiddleware {
   constructor(protected metrics: Metrics, protected config: PrometheusConfig) {}
 
   /**
    * Check if current route is excluded by the user in the configuration
    */
-  private isRouteExcluded(ctx: HttpContextContract): boolean {
+  private isRouteExcluded(ctx: HttpContext): boolean {
     const excludedRoutes = this.config.httpMetric.excludedRoutes || []
 
     if (typeof excludedRoutes === 'function') {
@@ -45,7 +46,7 @@ export class CollectPerformanceMetrics {
     }
   }
 
-  public async handle(ctx: HttpContextContract, next: () => Promise<void>) {
+  public async handle(ctx: HttpContext, next: NextFn) {
     const { request, response, route } = ctx
     const httpMetricOptions = this.config.httpMetric
 
@@ -54,6 +55,7 @@ export class CollectPerformanceMetrics {
      * given options for url parsing.
      * The timer will be stopped when the request is finished.
      */
+
     let stopHttpRequestTimer: MetricStartTimerReturn | undefined
     if (httpMetricOptions.enabled && !this.isRouteExcluded(ctx)) {
       const includeRouteParams = httpMetricOptions.includeRouteParams

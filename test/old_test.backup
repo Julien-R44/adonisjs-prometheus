@@ -1,5 +1,5 @@
 import { test } from '@japa/runner'
-import { setupAppServer } from '../tests-helpers/setup'
+import { setupAppServer } from '../test_helpers/setup.js'
 
 test.group('Prometheus', () => {
   test('Expose endpoint', async ({ client }) => {

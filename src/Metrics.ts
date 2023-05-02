@@ -1,26 +1,25 @@
-import * as prometheus from 'prom-client'
+import { Counter, Gauge, Histogram } from 'prom-client'
+import type { PrometheusConfig } from './types.js'
 
 export class Metrics {
   /**
    * Total time each HTTP request takes.
    */
-  public httpMetric: prometheus.Histogram<string>
+  public httpMetric: Histogram<string>
 
   /**
    * Uptime performance of the application.
    */
-  public uptimeMetric: prometheus.Gauge<string>
+  public uptimeMetric: Gauge<string>
 
   /**
    * No. of request handled.
    */
-  public throughputMetric: prometheus.Counter<string>
+  public throughputMetric: Counter<string>
 
-  constructor(protected config: any) {
-    this.httpMetric = new prometheus.Histogram(config.httpMetric)
-
-    this.uptimeMetric = new prometheus.Gauge(config.uptimeMetric)
-
-    this.throughputMetric = new prometheus.Counter(config.throughputMetric)
+  constructor(protected config: PrometheusConfig) {
+    this.httpMetric = new Histogram(config.httpMetric)
+    this.uptimeMetric = new Gauge(config.uptimeMetric)
+    this.throughputMetric = new Counter(config.throughputMetric)
   }
 }

@@ -1,6 +1,10 @@
-import { PrometheusConfig } from '@ioc:Adonis/Prometheus'
+---
+to: {{ app.configPath('prometheus.ts') }}
+---
 
-const prometheusConfig: PrometheusConfig = {
+import { defineConfig } from '@julr/adonisjs-prometheus'
+
+export default defineConfig({
   /*
   |--------------------------------------------------------------------------
   | Expose prometheus metrics via HTTP endpoint.
@@ -74,6 +78,4 @@ const prometheusConfig: PrometheusConfig = {
     help: 'No. of request handled.',
     prefix: '',
   },
-}
-
-export default prometheusConfig
+})

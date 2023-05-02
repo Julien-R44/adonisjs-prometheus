@@ -1,7 +1,10 @@
+import { pathToFileURL } from 'node:url'
+import { join } from 'desm'
 import { assert } from '@japa/assert'
 import { apiClient } from '@japa/api-client'
 import { specReporter } from '@japa/spec-reporter'
 import { configure, processCliArgs, run } from '@japa/runner'
+import { fileSystem } from '@japa/file-system'
 
 /*
 |--------------------------------------------------------------------------
@@ -18,12 +21,17 @@ import { configure, processCliArgs, run } from '@japa/runner'
 */
 configure({
   ...processCliArgs(process.argv.slice(2)),
-  ...{
-    files: ['tests/**/*.spec.ts'],
-    plugins: [assert(), apiClient('http://localhost:3333')],
-    reporters: [specReporter({ stackLinesCount: 2 })],
-    importer: (filePath) => import(filePath),
-  },
+  files: ['test/**/*.spec.ts'],
+  plugins: [
+    assert(),
+    apiClient('http://localhost:3333'),
+    fileSystem({
+      autoClean: false,
+      basePath: join(import.meta.url, '..', 'test', '__app'),
+    }),
+  ],
+  reporters: [specReporter({ stackLinesCount: 2 })],
+  importer: (filePath) => import(pathToFileURL(filePath).href),
 })
 
 /*
