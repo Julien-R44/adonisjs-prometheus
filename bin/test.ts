@@ -25,10 +25,7 @@ configure({
   plugins: [
     assert(),
     apiClient('http://localhost:3333'),
-    fileSystem({
-      autoClean: false,
-      basePath: join(import.meta.url, '..', 'test', '__app'),
-    }),
+    fileSystem({ basePath: join(import.meta.url, '..', 'test', '__app') }),
   ],
   reporters: [specReporter({ stackLinesCount: 2 })],
   importer: (filePath) => import(pathToFileURL(filePath).href),

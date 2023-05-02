@@ -2,9 +2,16 @@ import { createServer } from 'node:http'
 import { IgnitorFactory } from '@adonisjs/core/factories'
 import { defu } from 'defu'
 import { defineConfig } from '../index.js'
+import type { ApplicationService } from '@adonisjs/core/types'
 import type { PrometheusConfig } from '../src/types.js'
 
 export const BASE_URL = new URL('../test/__app/', import.meta.url)
+
+type DeepPartial<T> = T extends object
+  ? {
+      [P in keyof T]?: DeepPartial<T[P]>
+    }
+  : T
 
 export const DEFAULT_PROMETHEUS_CONFIG = defineConfig({
   endpoint: '/metrics',
@@ -16,7 +23,7 @@ export const DEFAULT_PROMETHEUS_CONFIG = defineConfig({
 
   uptimeMetric: {
     enabled: true,
-    name: 'uptime_metrics_test',
+    name: 'uptime_metrics',
     help: 'Uptime performance of the application (1 = up, 0 = down)',
     prefix: '',
   },
@@ -42,7 +49,12 @@ export const DEFAULT_PROMETHEUS_CONFIG = defineConfig({
   },
 })
 
-export async function setupApp(options: { promConfig?: Partial<PrometheusConfig> } = {}) {
+export async function setupApp(
+  options: {
+    promConfig?: DeepPartial<PrometheusConfig>
+    preSetup?: (app: ApplicationService) => Promise<any>
+  } = {}
+) {
   const ignitor = new IgnitorFactory()
     .merge({
       config: { prometheus: defu(options.promConfig, DEFAULT_PROMETHEUS_CONFIG) },
@@ -68,7 +80,7 @@ export async function setupApp(options: { promConfig?: Partial<PrometheusConfig>
   router.use([() => import('../src/collect_metrics_middleware.js')])
 
   let httpServer: ReturnType<typeof createServer>
-  await app.start(async () => {
+  app.ready(async () => {
     const server = await app.container.make('server')
     await server.boot()
 
@@ -76,12 +88,18 @@ export async function setupApp(options: { promConfig?: Partial<PrometheusConfig>
     httpServer.listen(3333)
   })
 
+  app.terminating(async () => {
+    httpServer.close()
+  })
+
+  await options.preSetup?.(app)
+  await app.start(() => {})
+
   return {
     app,
     ignitor,
     cleanup: () => {
       app.terminate()
-      httpServer.close()
     },
   }
 }

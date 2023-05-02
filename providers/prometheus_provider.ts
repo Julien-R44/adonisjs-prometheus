@@ -37,20 +37,18 @@ export default class PrometheusProvider {
   }
 
   public register(): void {
-    prometheus.register.clear()
+    const config = this.app.config.get<PrometheusConfig>('prometheus', {})
 
-    const promConfig = this.app.config.get<PrometheusConfig>('prometheus', {})
+    this.collectSystemMetrics(config)
+    this.exposeMetricsEndpoint(config)
 
-    this.collectSystemMetrics(promConfig)
-    this.exposeMetricsEndpoint(promConfig)
-
-    const metrics = new Metrics(promConfig)
-    if (promConfig.uptimeMetric.enabled) {
-      metrics.uptimeMetric.inc(1)
+    const metrics = new Metrics(config)
+    if (config.uptimeMetric.enabled) {
+      metrics.uptimeMetric!.inc(1)
     }
 
     this.app.container.bind(CollectMetricsMiddleware, () => {
-      return new CollectMetricsMiddleware(metrics, promConfig)
+      return new CollectMetricsMiddleware(metrics, config)
     })
   }
 

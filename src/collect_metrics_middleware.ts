@@ -1,9 +1,10 @@
+import type { Histogram } from 'prom-client'
 import type { NextFn } from '@adonisjs/core/types/http'
 import type { HttpContext } from '@adonisjs/core/http'
 import type { Metrics } from './metrics.js'
 import type { PrometheusConfig } from './types.js'
 
-type MetricStartTimerReturn = ReturnType<Metrics['httpMetric']['startTimer']>
+type MetricStartTimerReturn = ReturnType<Histogram['startTimer']>
 
 export default class CollectMetricsMiddleware {
   constructor(protected metrics: Metrics, protected config: PrometheusConfig) {}
@@ -31,7 +32,7 @@ export default class CollectMetricsMiddleware {
     /**
      * Track request throughput..
      */
-    if (enableThroughputMetric) this.metrics.throughputMetric.inc()
+    if (enableThroughputMetric) this.metrics.throughputMetric!.inc()
 
     /**
      * End HTTP request timer.
@@ -66,7 +67,7 @@ export default class CollectMetricsMiddleware {
         url += `?${request.parsedUrl.query}`
       }
 
-      stopHttpRequestTimer = this.metrics.httpMetric.startTimer({
+      stopHttpRequestTimer = this.metrics.httpMetric!.startTimer({
         method: request.method(),
         url,
       })
