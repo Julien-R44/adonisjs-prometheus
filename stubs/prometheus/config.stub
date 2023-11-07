@@ -1,6 +1,6 @@
----
-to: {{ app.configPath('prometheus.ts') }}
----
+{{{
+  exports({ to: app.configPath('prometheus.ts') })
+}}}
 
 import { defineConfig } from '@julr/adonisjs-prometheus'
 

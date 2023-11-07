@@ -4,7 +4,10 @@ import Configure from '@adonisjs/core/commands/configure'
 import { BASE_URL } from '../test_helpers/setup.js'
 
 test.group('Configure package', () => {
-  test('create config file and add provider', async ({ assert }) => {
+  test('create config file and add provider', async ({ assert, fs }) => {
+    await fs.createJson('tsconfig.json', {})
+    await fs.create('adonisrc.ts', `export default defineConfig({})`)
+
     const ignitor = new IgnitorFactory()
       .withCoreProviders()
       .withCoreConfig()
@@ -27,8 +30,7 @@ test.group('Configure package', () => {
     await command.exec()
 
     await assert.fileExists('config/prometheus.ts')
-    await assert.fileExists('.adonisrc.json')
-    await assert.fileContains('.adonisrc.json', '@julr/adonisjs-prometheus/prometheus_provider')
+    await assert.fileContains('adonisrc.ts', '@julr/adonisjs-prometheus/prometheus_provider')
     await assert.fileContains('config/prometheus.ts', 'defineConfig')
-  })
+  }).timeout(10_000)
 })
