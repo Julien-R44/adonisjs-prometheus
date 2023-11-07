@@ -53,51 +53,72 @@
   "devDependencies": {
     "@adonisjs/assembler": "6.1.3-25",
     "@adonisjs/core": "^6.1.5-31",
+    "@adonisjs/eslint-config": "^1.1.8",
+    "@adonisjs/prettier-config": "^1.1.8",
+    "@adonisjs/tsconfig": "^1.1.8",
     "@japa/api-client": "^2.0.1",
     "@japa/assert": "^2.0.1",
     "@japa/file-system": "^2.0.1",
     "@japa/runner": "^3.0.5",
-    "@julr/eslint-config": "^1.0.0",
     "@swc/core": "1.3.56",
     "@types/node": "^20.8.10",
-    "bumpp": "^9.2.0",
     "c8": "^8.0.1",
     "copyfiles": "^2.4.1",
     "defu": "^6.1.3",
     "del-cli": "^5.1.0",
     "eslint": "^8.53.0",
+    "eslint-plugin-perfectionist": "^2.2.0",
     "github-label-sync": "^2.3.1",
     "prettier": "^3.0.3",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   },
-  "pnpm": {
-    "peerDependencyRules": {
-      "ignoreMissing": [
-        "@babel/core",
-        "openapi-types"
+  "eslintConfig": {
+    "extends": "@adonisjs/eslint-config/package",
+    "plugins": [
+      "perfectionist"
+    ],
+    "rules": {
+      "@typescript-eslint/consistent-type-imports": [
+        "error",
+        {
+          "prefer": "type-imports",
+          "disallowTypeAnnotations": false
+        }
+      ],
+      "perfectionist/sort-imports": [
+        "error",
+        {
+          "type": "line-length",
+          "order": "asc",
+          "groups": [
+            "type",
+            "react",
+            "nanostores",
+            [
+              "builtin",
+              "external"
+            ],
+            [
+              "internal-type",
+              "internal",
+              "parent-type",
+              "sibling-type",
+              "index-type",
+              "parent",
+              "sibling",
+              "index",
+              "side-effect",
+              "style",
+              "object",
+              "unknown"
+            ]
+          ]
+        }
       ]
     }
   },
-  "eslintConfig": {
-    "ignorePatterns": [
-      "build"
-    ],
-    "extends": "@julr",
-    "rules": {
-      "@typescript-eslint/no-var-requires": "off"
-    }
-  },
-  "prettier": {
-    "trailingComma": "es5",
-    "semi": false,
-    "singleQuote": true,
-    "useTabs": false,
-    "quoteProps": "consistent",
-    "bracketSpacing": true,
-    "arrowParens": "always",
-    "printWidth": 100
-  },
+  "prettier": "@adonisjs/prettier-config",
   "publishConfig": {
     "access": "public",
     "tag": "latest"

@@ -1,18 +1,22 @@
 import type { Histogram } from 'prom-client'
-import type { NextFn } from '@adonisjs/core/types/http'
 import type { HttpContext } from '@adonisjs/core/http'
+import type { NextFn } from '@adonisjs/core/types/http'
+
 import type { Metrics } from './metrics.js'
 import type { PrometheusConfig } from './types.js'
 
 type MetricStartTimerReturn = ReturnType<Histogram['startTimer']>
 
 export default class CollectMetricsMiddleware {
-  constructor(protected metrics: Metrics, protected config: PrometheusConfig) {}
+  constructor(
+    protected metrics: Metrics,
+    protected config: PrometheusConfig
+  ) {}
 
   /**
    * Check if current route is excluded by the user in the configuration
    */
-  private isRouteExcluded(ctx: HttpContext): boolean {
+  #isRouteExcluded(ctx: HttpContext): boolean {
     const excludedRoutes = this.config.httpMetric.excludedRoutes || []
 
     if (typeof excludedRoutes === 'function') {
@@ -25,7 +29,7 @@ export default class CollectMetricsMiddleware {
   /**
    * Called when the request is finished.
    */
-  private async afterRequest(statusCode: number, stopHttpRequestTimer?: MetricStartTimerReturn) {
+  async #afterRequest(statusCode: number, stopHttpRequestTimer?: MetricStartTimerReturn) {
     const enableThroughputMetric = this.config.throughputMetric.enabled
     const httpMetricOptions = this.config.httpMetric
 
@@ -47,7 +51,7 @@ export default class CollectMetricsMiddleware {
     }
   }
 
-  public async handle(ctx: HttpContext, next: NextFn) {
+  async handle(ctx: HttpContext, next: NextFn) {
     const { request, response, route } = ctx
     const httpMetricOptions = this.config.httpMetric
 
@@ -58,7 +62,7 @@ export default class CollectMetricsMiddleware {
      */
 
     let stopHttpRequestTimer: MetricStartTimerReturn | undefined
-    if (httpMetricOptions.enabled && !this.isRouteExcluded(ctx)) {
+    if (httpMetricOptions.enabled && !this.#isRouteExcluded(ctx)) {
       const includeRouteParams = httpMetricOptions.includeRouteParams
       const includeQueryParams = httpMetricOptions.includeQueryParams
 
@@ -81,9 +85,9 @@ export default class CollectMetricsMiddleware {
      */
     try {
       await next()
-      this.afterRequest(response.response.statusCode, stopHttpRequestTimer)
+      this.#afterRequest(response.response.statusCode, stopHttpRequestTimer)
     } catch (err) {
-      this.afterRequest(err.status || 500, stopHttpRequestTimer)
+      this.#afterRequest(err.status || 500, stopHttpRequestTimer)
       throw err
     }
   }

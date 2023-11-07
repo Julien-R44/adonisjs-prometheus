@@ -1,8 +1,10 @@
-import * as prometheus from 'prom-client'
-import { Metrics } from '../src/metrics.js'
-import CollectMetricsMiddleware from '../src/collect_metrics_middleware.js'
 import type { ApplicationService } from '@adonisjs/core/types'
+
+import * as prometheus from 'prom-client'
+
+import { Metrics } from '../src/metrics.js'
 import type { PrometheusConfig } from '../src/types.js'
+import CollectMetricsMiddleware from '../src/collect_metrics_middleware.js'
 
 /**
  * Prometheus provider
@@ -36,7 +38,7 @@ export default class PrometheusProvider {
     }
   }
 
-  public register(): void {
+  register(): void {
     const config = this.app.config.get<PrometheusConfig>('prometheus', {})
 
     this.collectSystemMetrics(config)
@@ -52,7 +54,7 @@ export default class PrometheusProvider {
     })
   }
 
-  public async shutdown() {
+  async shutdown() {
     prometheus.register.clear()
   }
 }

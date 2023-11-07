@@ -1,8 +1,10 @@
+import type { ApplicationService } from '@adonisjs/core/types'
+
+import { defu } from 'defu'
 import { createServer } from 'node:http'
 import { IgnitorFactory } from '@adonisjs/core/factories'
-import { defu } from 'defu'
+
 import { defineConfig } from '../index.js'
-import type { ApplicationService } from '@adonisjs/core/types'
 import type { PrometheusConfig } from '../src/types.js'
 
 export const BASE_URL = new URL('../test/__app/', import.meta.url)

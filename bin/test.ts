@@ -1,8 +1,8 @@
-import { join } from 'desm'
 import { assert } from '@japa/assert'
 import { apiClient } from '@japa/api-client'
-import { configure, processCLIArgs, run } from '@japa/runner'
 import { fileSystem } from '@japa/file-system'
+import { configure, processCLIArgs, run } from '@japa/runner'
+
 import { BASE_URL } from '../test_helpers/setup.js'
 
 processCLIArgs(process.argv.slice(2))

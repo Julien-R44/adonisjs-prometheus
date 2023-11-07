@@ -1,5 +1,6 @@
 import { test } from '@japa/runner'
 import { Counter } from 'prom-client'
+
 import { setupApp } from '../test_helpers/setup.js'
 
 test.group('Collect Metrics middleware', () => {

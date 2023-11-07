@@ -1,6 +1,7 @@
 import { test } from '@japa/runner'
 import { IgnitorFactory } from '@adonisjs/core/factories'
 import Configure from '@adonisjs/core/commands/configure'
+
 import { BASE_URL } from '../test_helpers/setup.js'
 
 test.group('Configure package', () => {
