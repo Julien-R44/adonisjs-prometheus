@@ -1,7 +1,7 @@
 import { test } from '@japa/runner'
 import { Counter } from 'prom-client'
 
-import { setupApp } from '../test_helpers/setup.js'
+import { setupApp } from './helpers.js'
 
 test.group('Collect Metrics middleware', () => {
   test('Expose endpoint', async ({ client }) => {
