@@ -1,8 +1,7 @@
-import type { ApplicationService } from '@adonisjs/core/types'
-
 import { defu } from 'defu'
 import { createServer } from 'node:http'
 import { IgnitorFactory } from '@adonisjs/core/factories'
+import type { ApplicationService } from '@adonisjs/core/types'
 
 import { defineConfig } from '../index.js'
 import type { PrometheusConfig } from '../src/types.js'
@@ -55,7 +54,7 @@ export async function setupApp(
   options: {
     promConfig?: DeepPartial<PrometheusConfig>
     preSetup?: (app: ApplicationService) => Promise<any>
-  } = {}
+  } = {},
 ) {
   const ignitor = new IgnitorFactory()
     .merge({

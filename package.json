@@ -1,57 +1,8 @@
 {
   "name": "@julr/adonisjs-prometheus",
-  "description": "Prometheus wrapper for AdonisJS",
-  "version": "0.0.8",
-  "main": "build/index.js",
   "type": "module",
-  "exports": {
-    ".": "./build/index.js",
-    "./types": "./build/src/types.js"
-  },
-  "scripts": {
-    "pretest": "npm run lint",
-    "test": "c8 npm run quick:test",
-    "clean": "del-cli build",
-    "copy:templates": "copyfiles \"stubs/**/*.stub\" build",
-    "compile": "npm run lint && npm run clean && tsc && npm run copy:templates",
-    "build": "npm run compile",
-    "release": "pnpm build && pnpm release-it",
-    "version": "npm run build",
-    "format": "prettier --write .",
-    "prepublishOnly": "npm run build",
-    "lint": "eslint . --ext=.ts",
-    "quick:test": "node --loader=ts-node/esm bin/test.ts"
-  },
-  "devDependencies": {
-    "@adonisjs/assembler": "6.1.3-25",
-    "@adonisjs/core": "^6.9.0",
-    "@adonisjs/eslint-config": "^1.3.0",
-    "@adonisjs/prettier-config": "^1.3.0",
-    "@adonisjs/tsconfig": "^1.3.0",
-    "@japa/api-client": "^2.0.3",
-    "@japa/assert": "^2.1.0",
-    "@japa/file-system": "^2.3.0",
-    "@japa/runner": "^3.1.4",
-    "@swc/core": "1.3.56",
-    "@types/node": "^20.12.12",
-    "c8": "^9.1.0",
-    "copyfiles": "^2.4.1",
-    "defu": "^6.1.4",
-    "del-cli": "^5.1.0",
-    "eslint": "^8.57.0",
-    "prettier": "^3.2.5",
-    "release-it": "^17.3.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
-  },
-  "dependencies": {
-    "prom-client": "^15.1.2"
-  },
-  "peerDependencies": {
-    "@adonisjs/assembler": "6.1.3-25",
-    "@adonisjs/core": "^6.1.1-0"
-  },
-  "packageManager": "pnpm@8.15.8",
+  "version": "0.0.8",
+  "description": "Prometheus wrapper for AdonisJS",
   "author": "Julien Ripouteau <julien@ripouteau.com>",
   "license": "MIT",
   "homepage": "https://github.com/Julien-R44/adonis5-prometheus#readme",
@@ -70,52 +21,55 @@
     "monitoring",
     "grafana"
   ],
-  "eslintConfig": {
-    "extends": "@adonisjs/eslint-config/package",
-    "plugins": [
-      "perfectionist"
-    ],
-    "rules": {
-      "@typescript-eslint/consistent-type-imports": [
-        "error",
-        {
-          "prefer": "type-imports",
-          "disallowTypeAnnotations": false
-        }
-      ],
-      "perfectionist/sort-imports": [
-        "error",
-        {
-          "type": "line-length",
-          "order": "asc",
-          "groups": [
-            "type",
-            "react",
-            "nanostores",
-            [
-              "builtin",
-              "external"
-            ],
-            [
-              "internal-type",
-              "internal",
-              "parent-type",
-              "sibling-type",
-              "index-type",
-              "parent",
-              "sibling",
-              "index",
-              "side-effect",
-              "style",
-              "object",
-              "unknown"
-            ]
-          ]
-        }
-      ]
-    }
+  "exports": {
+    ".": "./build/index.js",
+    "./types": "./build/src/types.js"
   },
-  "prettier": "@adonisjs/prettier-config",
+  "scripts": {
+    "pretest": "npm run lint",
+    "test": "c8 npm run quick:test",
+    "clean": "del-cli build",
+    "copy:templates": "copyfiles \"stubs/**/*.stub\" build",
+    "compile": "npm run lint && npm run clean && tsc && npm run copy:templates",
+    "build": "npm run compile",
+    "release": "pnpm build && pnpm release-it",
+    "version": "npm run build",
+    "format": "prettier --write .",
+    "prepublishOnly": "npm run build",
+    "lint": "eslint .",
+    "quick:test": "node --loader=ts-node/esm bin/test.ts"
+  },
+  "peerDependencies": {
+    "@adonisjs/assembler": "6.1.3-25",
+    "@adonisjs/core": "^6.1.1-0"
+  },
+  "dependencies": {
+    "prom-client": "^15.1.2"
+  },
+  "devDependencies": {
+    "@adonisjs/assembler": "6.1.3-25",
+    "@adonisjs/core": "^6.9.0",
+    "@adonisjs/eslint-config": "^1.3.0",
+    "@adonisjs/prettier-config": "^1.3.0",
+    "@adonisjs/tsconfig": "^1.3.0",
+    "@japa/api-client": "^2.0.3",
+    "@japa/assert": "^3.0.0",
+    "@japa/file-system": "^2.3.0",
+    "@japa/runner": "^3.1.4",
+    "@julr/tooling-configs": "^2.2.0",
+    "@swc/core": "1.3.56",
+    "@types/node": "^20.12.12",
+    "c8": "^9.1.0",
+    "copyfiles": "^2.4.1",
+    "defu": "^6.1.4",
+    "del-cli": "^5.1.0",
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.5",
+    "release-it": "^17.3.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  },
+  "prettier": "@julr/tooling-configs/prettier",
   "publishConfig": {
     "access": "public",
     "tag": "latest"

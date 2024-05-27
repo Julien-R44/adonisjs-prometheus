@@ -10,7 +10,7 @@ type MetricStartTimerReturn = ReturnType<Histogram['startTimer']>
 export default class CollectMetricsMiddleware {
   constructor(
     protected metrics: Metrics,
-    protected config: PrometheusConfig
+    protected config: PrometheusConfig,
   ) {}
 
   /**

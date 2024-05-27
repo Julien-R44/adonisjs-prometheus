@@ -93,12 +93,12 @@ test.group('Collect Metrics middleware', () => {
 
     assert.include(
       response.text(),
-      'adonis_http_request_durations_count{method="GET",url="/test",statusCode="4xx"} 3'
+      'adonis_http_request_durations_count{method="GET",url="/test",statusCode="4xx"} 3',
     )
 
     assert.include(
       response.text(),
-      'adonis_http_request_durations_count{method="GET",url="/test",statusCode="2xx"} 2'
+      'adonis_http_request_durations_count{method="GET",url="/test",statusCode="2xx"} 2',
     )
 
     cleanup()
@@ -151,12 +151,12 @@ test.group('Collect Metrics middleware', () => {
 
     assert.include(
       response.text(),
-      'adonis_http_request_durations_count{method="GET",url="/test?status=200&foo=bar",statusCode="2xx"} 1'
+      'adonis_http_request_durations_count{method="GET",url="/test?status=200&foo=bar",statusCode="2xx"} 1',
     )
 
     assert.include(
       response.text(),
-      'adonis_http_request_durations_count{method="GET",url="/test?status=201&foo=baz",statusCode="2xx"} 1'
+      'adonis_http_request_durations_count{method="GET",url="/test?status=201&foo=baz",statusCode="2xx"} 1',
     )
 
     cleanup()
@@ -178,7 +178,7 @@ test.group('Collect Metrics middleware', () => {
 
     assert.include(
       response.text(),
-      'adonis_http_request_durations_count{method="GET",url="/test",statusCode="2xx"} 2'
+      'adonis_http_request_durations_count{method="GET",url="/test",statusCode="2xx"} 2',
     )
 
     cleanup()

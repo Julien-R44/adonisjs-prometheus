@@ -1,6 +1,5 @@
-import type { ApplicationService } from '@adonisjs/core/types'
-
 import * as prometheus from 'prom-client'
+import type { ApplicationService } from '@adonisjs/core/types'
 
 import { Metrics } from '../src/metrics.js'
 import type { PrometheusConfig } from '../src/types.js'
