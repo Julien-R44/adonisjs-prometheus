@@ -50,7 +50,7 @@ jobs:
         run: pnpm install
 
       - name: Typecheck
-        run: pnpm exec tsc --noEmit
+        run: pnpm typecheck
 
   test:
     runs-on: ubuntu-latest

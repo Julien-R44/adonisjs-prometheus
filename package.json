@@ -37,7 +37,8 @@
     "format": "prettier --write .",
     "prepublishOnly": "npm run build",
     "lint": "eslint .",
-    "quick:test": "node --loader=ts-node/esm bin/test.ts"
+    "quick:test": "node --loader=ts-node/esm bin/test.ts",
+    "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
     "@adonisjs/assembler": "6.1.3-25",
