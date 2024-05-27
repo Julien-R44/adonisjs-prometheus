@@ -15,12 +15,11 @@
     "copy:templates": "copyfiles \"stubs/**/*.stub\" build",
     "compile": "npm run lint && npm run clean && tsc && npm run copy:templates",
     "build": "npm run compile",
-    "release": "np",
+    "release": "pnpm build && pnpm release-it",
     "version": "npm run build",
     "format": "prettier --write .",
     "prepublishOnly": "npm run build",
     "lint": "eslint . --ext=.ts",
-    "sync-labels": "github-label-sync --labels .github/labels.json adonisjs/cors",
     "quick:test": "node --loader=ts-node/esm bin/test.ts"
   },
   "devDependencies": {
@@ -40,9 +39,8 @@
     "defu": "^6.1.4",
     "del-cli": "^5.1.0",
     "eslint": "^8.57.0",
-    "eslint-plugin-perfectionist": "^2.10.0",
-    "github-label-sync": "^2.3.1",
     "prettier": "^3.2.5",
+    "release-it": "^17.3.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
@@ -122,9 +120,17 @@
     "access": "public",
     "tag": "latest"
   },
-  "np": {
-    "contents": ".",
-    "anyBranch": false
+  "release-it": {
+    "git": {
+      "commitMessage": "chore(release): @julr/adonisjs-prometheus@${version}",
+      "tagAnnotation": "release ${version}",
+      "tagName": "@julr/adonisjs-prometheus@${version}"
+    },
+    "github": {
+      "release": true,
+      "releaseName": "@julr/adonisjs-prometheus@${version}",
+      "web": true
+    }
   },
   "c8": {
     "reporter": [
