@@ -59,7 +59,7 @@ export async function setupApp(
   const ignitor = new IgnitorFactory()
     .merge({
       config: { prometheus: defu(options.promConfig, DEFAULT_PROMETHEUS_CONFIG) },
-      rcFileContents: { providers: ['../../providers/prometheus_provider.js'] },
+      rcFileContents: { providers: [() => import('../providers/prometheus_provider.js')] },
     })
     .withCoreProviders()
     .withCoreConfig()
