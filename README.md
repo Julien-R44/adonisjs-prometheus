@@ -195,14 +195,6 @@ export default defineConfig({
 })
 ```
 
-## Grafana Dashboard
-
-A ready-to-use dashboard is available in the `grafana` folder.
-
-![https://i.imgur.com/mD0UMhA.png?1](https://i.imgur.com/mD0UMhA.png?1)
-
-Feel free to use it as a base and customize it to your needs. Happy to accept PRs if you want to improve it or add alternative dashboards.
-
 ## Sponsors
 
 If you like this project, [please consider supporting it by sponsoring it](https://github.com/sponsors/Julien-R44/). It will help a lot to maintain and improve it. Thanks a lot !
