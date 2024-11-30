@@ -2,7 +2,7 @@
   <img src="https://i.imgur.com/ny3ka9X.png"  />  
 </div>
 
-# adonisjs-prometheus
+# adonisjs-prometheus 
 
 📊 Prometheus package for AdonisJS
 
