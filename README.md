@@ -1,97 +1,210 @@
 <div align="center">
-  <img src="https://i.imgur.com/QZf8jrj.png" width="300px" />  
-  <br/>
-  <h3>Adonis5-Prometheus</h3>
-  <p>Simple Prometheus Wrapper for Adonis</p>
-  <a href="https://www.npmjs.com/package/adonis5-prometheus">
-    <img src="https://img.shields.io/npm/v/adonis5-prometheus.svg?style=for-the-badge&logo=npm" />
-  </a>
-  <img src="https://img.shields.io/npm/l/adonis5-prometheus?color=blueviolet&style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Typescript-294E80.svg?style=for-the-badge&logo=typescript" />
+  <img src="https://i.imgur.com/ny3ka9X.png"  />  
 </div>
 
+# adonisjs-prometheus 
+
+📊 Prometheus package for AdonisJS
+
 ## Installation
-```
-npm i adonis5-prometheus
-node ace configure adonis5-prometheus
+
+```sh
+node ace add @julr/adonisjs-prometheus
 ```
 
 ## Usage
 
-A configuration file has been added in `config/prometheus.ts`.
+After installing the package, a configuration file is added to `config/prometheus.ts` in your application.
 
-By default the system metrics are collected ( `systemMetrics.enabled: true` ), so now you can call the endpoint `{{host}}/metrics` to get the measured metrics.
+```ts
+export default defineConfig({
+  /**
+   * Endpoint where metrics will be exposed
+   */
+  endpoint: '/metrics',
 
-Here is an example scrape_config to add to prometheus.yml:
-```yaml
-scrape_configs:
-  - job_name: my-adonis-app
-    static_configs:
-      - targets: [my-adonis-app.com]
-    scrape_interval: 5s
+  /**
+   * A prefix that will be added to all metrics
+   * names
+   */
+  metricsPrefix: env.get('APP_NAME'),
+
+  /**
+   * List of IPs that are allowed to access the
+   * metrics endpoint. If empty, then everyone
+   * can access the endpoint
+   */
+  ipsWhitelist: [],
+
+  /**
+   * List of collectors that will be registered
+   * and expose new metrics.
+   *
+   * Feel free to remove collectors that you
+   * don't want to use
+   */
+  collectors: [
+    httpCollector(),
+    mailCollector(),
+    lucidCollector(),
+    cacheCollector(),
+    systemCollector(),
+  ],
+})
 ```
 
-## Built-in Metrics
-Metrics collected by Adonis5-prometheus middleware
-| Type      | Name                              | Description                                                 |
-| ---       | ---                               | ---                                                         |
-| Histogram | `adonis_http_request_durations`   | Total time each HTTP requests takes.                        |
-| Gauge     | `adonis_uptime_metrics`           | Uptime performance of the application (1 = up, 0 = down)    |
-| Counter   | `adonis_throughput_metrics`       | No. of request handled.                                     |
+The available options are:
 
-To enable them, simply register the `CollectPerformanceMetrics` as the first item in the start/kernel.ts:
-```typescript
-Server.middleware.register([
-  // Make it first in the list for reliable metrics.
-  () => import('@ioc:Adonis/Prometheus/Middlewares/CollectPerformanceMetrics'),
-  () => import('@ioc:Adonis/Core/BodyParser'),
-  ...
-])
-```
-Verify if the metrics are enabled in the `config/prometheus.ts` file. You can also configure the metrics there.
+- `endpoint`: The URL of the endpoint where metrics will be exposed. Defaults to `/metrics`.
+- `metricsPrefix`: A prefix that will be added to all metric names. Defaults to the app name.
+- `ipsWhitelist`: A list of IP addresses allowed to access the metrics endpoint. If empty, everyone can access it. Defaults to an empty array.
+- `collectors`: The list of collectors that will be registered and expose new metrics. You can remove collectors you don't want to use.
 
-## Custom Metrics
-```typescript
-// Register your custom metrics in the separate file you want.
-export const OrderMetric = new Prometheus.Counter({
+## Collectors
+
+Each collector accepts options to customize the metrics it exposes. Be sure to explore these options using your editor's auto-completion to learn more.
+
+### HTTP Collector
+
+Adds metrics to monitor HTTP requests:
+
+#### Exposed Metrics
+
+- `http_requests_total`: Counter for the total number of HTTP requests.
+- `http_request_duration_seconds`: Histogram of HTTP request durations.
+
+#### Options
+
+- `shouldGroupStatusCode`: Groups HTTP status codes into 1xx, 2xx, 3xx, 4xx, and 5xx. Defaults to `false`.
+- `excludedRoutes`: A list of routes to exclude from metrics. Defaults to an empty array. You can pass a list of `string` or a function `(ctx: HttpContext) => boolean`.
+- `requestDuration.buckets`: The buckets for the histogram of HTTP request durations.
+
+### System Collector
+
+Adds metrics to monitor the host system's performance. See [Default Metrics](https://github.com/siimon/prom-client#default-metrics) for more information. The collector accepts the same options as the `prom-client` `collectDefaultMetrics` function.
+
+### Lucid Collector
+
+Adds metrics to monitor database queries made through `@adonisjs/lucid`.
+
+> [!IMPORTANT]
+> To use the Lucid collector, you must set `debug: true` in your `config/database.ts` file.
+
+#### Exposed Metrics
+
+- `lucid_query_duration_seconds`: Histogram of Lucid query durations. Labels include `connection`, `model`, and `method`.
+
+#### Options
+
+- `queryDuration.buckets`: The buckets for the histogram of Lucid query durations.
+
+### Cache Collector
+
+Adds metrics to monitor `@adonisjs/cache` operations.
+
+#### Exposed Metrics
+
+- `cache_hits_total`: Counter for the total number of cache hits.
+- `cache_misses_total`: Counter for the total number of cache misses.
+- `cache_writes_total`: Counter for the total number of cache writes.
+
+### Mail Collector
+
+Adds metrics to monitor emails sent through `@adonisjs/mail`.
+
+#### Exposed Metrics
+
+- `mails_sent_total`: Counter for the total number of emails sent.
+
+## Custom metrics
+
+To add your own metrics, you have two options:
+
+### Use prom-client
+
+You can directly use `prom-client` with the same registry :
+
+```ts
+import { Counter } from 'prom-client'
+
+export const orderMetrics = new Counter({
   name: 'sent_orders',
   help: 'Total Orders Sent',
 })
 
-// OrderController.ts
-import { OrderMetric } from 'App/Metrics'
-
 export default class OrderController {
-  public async store({ request }: HttpContextContract) {
-    const order = await request.validate({ schema: OrderSchema })
-
+  public async store({ request }: HttpContext) {
     // ...
     OrderMetric.inc()
     // ...
   }
 }
 ```
-When hitting `{{host}}/metrics` you will now get the following:
+
+### Create a custom collector
+
+You can also create a custom collector to expose your metrics:
+
+```ts
+import { Collector } from '@julr/adonisjs-prometheus/collectors/collector'
+
+export function appOrdersCollector() {
+  return configProvider.create(async (app) => {
+    const emitter = await app.container.make('emitter')
+    const config = app.config.get<ResolvedPromConfig>('prometheus')
+
+    return new MailCollector(emitter, config)
+  })
+}
+
+export class AppOrdersCollector extends Collector {
+  constructor(
+    private emitter: EmitterService,
+    options: CommonCollectorOptions,
+  ) {
+    super(options)
+  }
+
+  async register() {
+    const orderMetrics = this.createGauge({
+      name: 'sent_orders',
+      help: 'Total Orders Sent',
+    })
+
+    /**
+     * Let's imagine that your emitter emits a `new:order` event.
+     * This is one way to collect metrics, but you can do it the way you want :
+     * - Using a listener
+     * - Using a DB Query and the `collect()` method of the gauge
+     * - etc.
+     */
+    this.emitter.on('new:order', () => orderMetrics.inc())
+  }
+}
 ```
-# HELP send_orders Total Orders Sent
-# TYPE send_orders counter
-sent_orders 2
+
+Then, add your collector to the `config/prometheus.ts` configuration file:
+
+```ts
+export default defineConfig({
+  // ...
+  collectors: [
+    // ...
+    appOrdersCollector(),
+  ],
+})
 ```
 
 ## Grafana Dashboard
-A basic ready to use dashboard is available in the `grafana` folder.
-**Grafana 8 is required** to be able to import the dashboard correctly, otherwise you'll have to tinker a bit to make it work.
+
+A ready-to-use dashboard is available in the `grafana` folder.
+
 ![https://i.imgur.com/mD0UMhA.png?1](https://i.imgur.com/mD0UMhA.png?1)
-It includes :
-- Process CPU usage
-- Event loop lag
-- Node.JS version
-- Requests by second
-- Request volume rate by URL
-- Average response time
-- Response error rate by URL
 
-To be fully functional, you need to enable `systemMetrics`, `httpMetric` and `throughputMetric` in the `config/prometheus.ts` file.
+Feel free to use it as a base and customize it to your needs. Happy to accept PRs if you want to improve it or add alternative dashboards.
 
-## Documentation
-This library is a wrapper for prom-client. The prom-client object can be imported with `import Prometheus from '@ioc:Adonis/Prometheus'`. Check out the [documentation](https://github.com/siimon/prom-client) for more information.
+## Sponsors
+
+If you like this project, [please consider supporting it by sponsoring it](https://github.com/sponsors/Julien-R44/). It will help a lot to maintain and improve it. Thanks a lot !
+
+![](https://github.com/julien-r44/static/blob/main/sponsorkit/sponsors.png?raw=true)
