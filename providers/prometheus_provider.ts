@@ -1,9 +1,7 @@
-import * as prometheus from 'prom-client'
 import type { ApplicationService } from '@adonisjs/core/types'
 
-import { Metrics } from '../src/metrics.js'
-import type { PrometheusConfig } from '../src/types.js'
-import CollectMetricsMiddleware from '../src/collect_metrics_middleware.js'
+import type { ResolvedPromConfig as ResolvedPrometheusConfiguration } from '../src/types.js'
+import { PrometheusMetricController } from '../src/controllers/prometheus_metric_controller.js'
 
 /**
  * Prometheus provider
@@ -14,46 +12,25 @@ export default class PrometheusProvider {
   /**
    * Create route that will expose prometheus metrics
    */
-  private async exposeMetricsEndpoint(config: PrometheusConfig) {
-    if (config.exposeHttpEndpoint === false) {
-      return
-    }
-
+  async #exposeMetricsEndpoint(config: ResolvedPrometheusConfiguration) {
     const router = await this.app.container.make('router')
-    const urlPath = config.endpoint || '/metrics'
+    const endpointPath = config.endpoint || '/metrics'
 
-    router.get(urlPath, async ({ response }) => {
-      const metrics = await prometheus.register.metrics()
-      return response.header('Content-type', prometheus.register.contentType).ok(metrics)
-    })
+    router.get(endpointPath, [PrometheusMetricController]).as('prometheus.metrics')
   }
 
   /**
-   * Collect system metrics if enabled
+   * - Resolve all collectors and register them
+   * - Expose metrics endpoint
    */
-  private collectSystemMetrics(config: PrometheusConfig) {
-    if (config.systemMetrics.enabled) {
-      prometheus.collectDefaultMetrics(config.systemMetrics)
-    }
-  }
+  async boot() {
+    const config = this.app.config.get<ResolvedPrometheusConfiguration>('prometheus')
 
-  register(): void {
-    const config = this.app.config.get<PrometheusConfig>('prometheus', {})
-
-    this.collectSystemMetrics(config)
-    this.exposeMetricsEndpoint(config)
-
-    const metrics = new Metrics(config)
-    if (config.uptimeMetric.enabled) {
-      metrics.uptimeMetric!.inc(1)
+    for (const collectorConfigProvider of config.collectors) {
+      const collector = await collectorConfigProvider.resolver(this.app)
+      collector.register()
     }
 
-    this.app.container.bind(CollectMetricsMiddleware, () => {
-      return new CollectMetricsMiddleware(metrics, config)
-    })
-  }
-
-  async shutdown() {
-    prometheus.register.clear()
+    await this.#exposeMetricsEndpoint(config)
   }
 }

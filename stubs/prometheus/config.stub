@@ -2,80 +2,45 @@
   exports({ to: app.configPath('prometheus.ts') })
 }}}
 
+import env from '#start/env'
 import { defineConfig } from '@julr/adonisjs-prometheus'
+import { httpCollector } from '@julr/adonisjs-prometheus/collectors/http_collector'
+import { mailCollector } from '@julr/adonisjs-prometheus/collectors/mail_collector'
+import { cacheCollector } from '@julr/adonisjs-prometheus/collectors/cache_collector'
+import { lucidCollector } from '@julr/adonisjs-prometheus/collectors/lucid_collector'
+import { systemCollector } from '@julr/adonisjs-prometheus/collectors/system_collector'
 
 export default defineConfig({
-  /*
-  |--------------------------------------------------------------------------
-  | Expose prometheus metrics via HTTP endpoint.
-  |--------------------------------------------------------------------------
-  */
-  exposeHttpEndpoint: true,
-
-  /*
-  |--------------------------------------------------------------------------
-  | Endpoint to GET prometheus metrics.
-  |--------------------------------------------------------------------------
-  */
+  /**
+   * Endpoint where metrics will be exposed
+   */
   endpoint: '/metrics',
 
-  /*
-  |--------------------------------------------------------------------------
-  | System Metric.
-  |--------------------------------------------------------------------------
-  |
-  | Collect overall performance metrics of the entire application.
-  */
-  systemMetrics: {
-    enabled: true,
-    prefix: '',
-  },
+  /**
+   * A prefix that will be added to all metrics
+   * names
+   */
+  metricsPrefix: env.get('APP_NAME'),
 
-  /*
-  |--------------------------------------------------------------------------
-  | HTTP Metric
-  |--------------------------------------------------------------------------
-  |
-  | Measures the performance of HTTP request based on status codes returned.
-  */
-  httpMetric: {
-    enabled: true,
-    name: 'adonis_http_request_durations',
-    includeQueryParams: false,
-    includeRouteParams: false,
-    shouldGroupStatusCode: true,
-    help: 'Total time each HTTP request takes.',
-    labelNames: ['method', 'url', 'statusCode'],
-    buckets: [0.003, 0.03, 0.1, 0.3, 1.5, 10],
-    prefix: '',
-    excludedRoutes: ['/metrics', '/health'],
-  },
+  /**
+   * List of IPs that are allowed to access the
+   * metrics endpoint. If empty, then everyone
+   * can access the endpoint
+   */
+  ipsWhitelist: [],
 
-  /*
-  |--------------------------------------------------------------------------
-  | Uptime
-  |--------------------------------------------------------------------------
-  |
-  | Track the uptime of the entire application.
-  */
-  uptimeMetric: {
-    enabled: false,
-    name: 'adonis_uptime_metrics',
-    help: 'Uptime performance of the application (1 = up, 0 = down)',
-    prefix: '',
-  },
-
-  /*
-  |--------------------------------------------------------------------------
-  | Throughput Performance
-  |--------------------------------------------------------------------------
-  |
-  | Measures throughput for every request received into the application.
-  */
-  throughputMetric: {
-    enabled: true,
-    name: 'adonis_throughput_metrics',
-    help: 'No. of request handled.',
-    prefix: '',
-  },
+  /**
+   * List of collectors that will be registered
+   * and expose new metrics.
+   *
+   * Feel free to remove collectors that you
+   * don't want to use
+   */
+  collectors: [
+    httpCollector(),
+    mailCollector(),
+    lucidCollector(),
+    cacheCollector(),
+    systemCollector(),
+  ],
 })

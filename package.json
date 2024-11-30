@@ -2,6 +2,7 @@
   "name": "@julr/adonisjs-prometheus",
   "type": "module",
   "version": "0.0.8",
+  "packageManager": "pnpm@9.14.2+sha512.6e2baf77d06b9362294152c851c4f278ede37ab1eba3a55fda317a4a17b209f4dbb973fb250a77abc463a341fcb1f17f17cfa24091c4eb319cda0d9b84278387",
   "description": "Prometheus wrapper for AdonisJS",
   "author": "Julien Ripouteau <julien@ripouteau.com>",
   "license": "MIT",
@@ -23,8 +24,14 @@
   ],
   "exports": {
     ".": "./build/index.js",
-    "./types": "./build/src/types.js"
+    "./types": "./build/src/types.js",
+    "./prometheus_provider": "./build/providers/prometheus_provider.js",
+    "./collectors/*": "./build/src/collectors/*.js",
+    "./collect_http_metrics_middleware": "./build/src/middleware/collect_http_metrics_middleware.js"
   },
+  "files": [
+    "build"
+  ],
   "scripts": {
     "pretest": "npm run lint",
     "test": "c8 npm run quick:test",
@@ -37,38 +44,54 @@
     "format": "prettier --write .",
     "prepublishOnly": "npm run build",
     "lint": "eslint .",
-    "quick:test": "node --loader=ts-node/esm bin/test.ts",
+    "quick:test": "node --enable-source-maps --import=ts-node-maintained/register/esm bin/test.ts",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@adonisjs/assembler": "6.1.3-25",
-    "@adonisjs/core": "^6.1.1-0"
+    "@adonisjs/assembler": "7.8.2",
+    "@adonisjs/cache": "1.0.0-4",
+    "@adonisjs/core": "^6.15.1",
+    "@adonisjs/lucid": "^21.4.0",
+    "@adonisjs/mail": "^9.2.2"
+  },
+  "peerDependenciesMeta": {
+    "@adonisjs/mail": {
+      "optional": true
+    },
+    "@adonisjs/lucid": {
+      "optional": true
+    },
+    "@adonisjs/cache": {
+      "optional": true
+    }
   },
   "dependencies": {
-    "prom-client": "^15.1.2"
+    "prom-client": "^15.1.3"
   },
   "devDependencies": {
-    "@adonisjs/assembler": "6.1.3-25",
-    "@adonisjs/core": "^6.9.0",
-    "@adonisjs/eslint-config": "^1.3.0",
-    "@adonisjs/prettier-config": "^1.3.0",
-    "@adonisjs/tsconfig": "^1.3.0",
-    "@japa/api-client": "^2.0.3",
+    "@adonisjs/assembler": "7.8.2",
+    "@adonisjs/cache": "1.0.0-4",
+    "@adonisjs/core": "^6.15.1",
+    "@adonisjs/lucid": "^21.4.0",
+    "@adonisjs/mail": "^9.2.2",
+    "@adonisjs/tsconfig": "^1.4.0",
+    "@japa/api-client": "^2.0.4",
     "@japa/assert": "^3.0.0",
     "@japa/file-system": "^2.3.0",
     "@japa/runner": "^3.1.4",
-    "@julr/tooling-configs": "^2.2.0",
-    "@swc/core": "^1.5.7",
-    "@types/node": "^20.12.12",
-    "c8": "^9.1.0",
+    "@julr/tooling-configs": "^3.0.0",
+    "@swc/core": "^1.9.3",
+    "@types/node": "^22.10.1",
+    "c8": "^10.1.2",
     "copyfiles": "^2.4.1",
     "defu": "^6.1.4",
-    "del-cli": "^5.1.0",
-    "eslint": "^8.57.0",
-    "prettier": "^3.2.5",
-    "release-it": "^17.3.0",
+    "del-cli": "^6.0.0",
+    "eslint": "^9.15.0",
+    "prettier": "^3.4.1",
+    "release-it": "^17.10.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "ts-node-maintained": "^10.9.4",
+    "typescript": "^5.7.2"
   },
   "prettier": "@julr/tooling-configs/prettier",
   "publishConfig": {
