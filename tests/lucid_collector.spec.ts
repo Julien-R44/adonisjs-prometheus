@@ -3,13 +3,10 @@ import { Registry } from 'prom-client'
 import { IgnitorFactory } from '@adonisjs/core/factories'
 import { EmitterFactory } from '@adonisjs/core/factories/events'
 
+import { secondsToNanoSeconds } from './helpers.js'
 import { LucidCollector } from '../src/collectors/lucid_collector.js'
 
-function secondsToNanoSeconds(seconds: number) {
-  return seconds * 1_000_000_000
-}
-
-test.group('LucidCollector', (group) => {
+test.group('LucidCollector', () => {
   test('monitor queries', async ({ assert, fs }) => {
     const app = new IgnitorFactory().create(fs.baseUrl)
     const emitter = new EmitterFactory().create(app.getApp()!)
