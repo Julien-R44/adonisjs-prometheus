@@ -50,6 +50,8 @@ export class HttpCollector extends Collector {
    * Check if the current route is excluded by the user configuration.
    */
   #isExcludedRoute(ctx: HttpContext) {
+    if (!ctx.route) return true
+
     const excludedRoutes = this.options.excludedRoutes || []
 
     if (typeof excludedRoutes === 'function') {
@@ -73,7 +75,6 @@ export class HttpCollector extends Collector {
    * Called when an HTTP request is completed.
    */
   #onHttpRequestCompleted(event: HttpRequestFinishedPayload) {
-    console.log('event', event)
     if (this.#isExcludedRoute(event.ctx)) return
 
     const status = this.#createStatusCode(event.ctx)
