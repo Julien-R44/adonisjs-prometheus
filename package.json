@@ -48,8 +48,8 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@adonisjs/assembler": "7.8.2",
-    "@adonisjs/cache": "1.0.0-4",
+    "@adonisjs/assembler": "^7.8.2",
+    "@adonisjs/cache": "^1.0.0",
     "@adonisjs/core": "^6.15.1",
     "@adonisjs/lucid": "^21.4.0",
     "@adonisjs/mail": "^9.2.2"
@@ -89,7 +89,6 @@
     "eslint": "^9.19.0",
     "prettier": "^3.4.2",
     "release-it": "^18.1.2",
-    "ts-node": "^10.9.2",
     "ts-node-maintained": "^10.9.5",
     "typescript": "^5.7.3"
   },
