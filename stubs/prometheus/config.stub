@@ -40,7 +40,19 @@ export default defineConfig({
     httpCollector(),
     mailCollector(),
     lucidCollector(),
-    cacheCollector(),
+    cacheCollector({
+      /**
+       * Group cache keys to reduce metric cardinality
+       * 
+       * Example: Transform 'users:1', 'users:2', etc. into 'users:*'
+       * to avoid creating individual metrics for each user ID
+       */
+      keyGroups: [
+        // [/^users:(\d+)$/, 'users:*'],
+        // [/^posts:(\d+)$/, 'posts:*'],
+        // [/^session:[\w-]+$/, 'session:*'],
+      ],
+    }),
     systemCollector(),
   ],
 })

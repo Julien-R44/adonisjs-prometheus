@@ -8,12 +8,21 @@ import { Collector } from './collector.js'
 import { mergeCommonAndCollectorOptions } from '../utils.js'
 import type { CommonCollectorOptions, ResolvedPromConfig } from '../types.js'
 
-export function cacheCollector() {
+export interface CacheCollectorOptions {
+  /**
+   * Key groups
+   *
+   * See https://bentocache.dev/docs/plugin-prometheus#keygroups
+   */
+  keyGroups?: Array<[RegExp, ((match: RegExpMatchArray) => string) | string]>
+}
+
+export function cacheCollector(options: CacheCollectorOptions = {}) {
   return configProvider.create(async (app) => {
     const config = app.config.get<ResolvedPromConfig>('prometheus')
     const emitter = await app.container.make('emitter')
 
-    return new CacheCollector(emitter, mergeCommonAndCollectorOptions(config, {}))
+    return new CacheCollector(emitter, mergeCommonAndCollectorOptions(config, options))
   })
 }
 
@@ -24,21 +33,39 @@ export class CacheCollector extends Collector {
 
   constructor(
     private emitter: EmitterService,
-    options: CommonCollectorOptions,
+    private options: CommonCollectorOptions & CacheCollectorOptions,
   ) {
     super(options)
   }
 
+  /**
+   * Get the key label that will be used for the metrics
+   * based on the keyGroups defined in the options
+   */
+  #getKeyLabel(key: string): string {
+    for (const [regex, group] of this.options.keyGroups ?? []) {
+      if (!regex.test(key)) continue
+
+      if (typeof group === 'string') return group
+      return group(regex.exec(key)!)
+    }
+
+    return key
+  }
+
   #onCacheHit(payload: { key: string; store: string; value: any }) {
-    this.cacheHitsCounter?.inc({ store: payload.store, key: payload.key })
+    const key = this.#getKeyLabel(payload.key)
+    this.cacheHitsCounter?.inc({ store: payload.store, key })
   }
 
   #onCacheMiss(payload: { key: string; store: string }) {
-    this.cacheMissesCounter?.inc({ store: payload.store, key: payload.key })
+    const key = this.#getKeyLabel(payload.key)
+    this.cacheMissesCounter?.inc({ store: payload.store, key })
   }
 
   #onCacheWritten(payload: { key: string; store: string; value: any }) {
-    this.cacheWritesCounter?.inc({ store: payload.store, key: payload.key })
+    const key = this.#getKeyLabel(payload.key)
+    this.cacheWritesCounter?.inc({ store: payload.store, key })
   }
 
   async register() {
