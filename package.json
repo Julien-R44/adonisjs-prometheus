@@ -27,7 +27,8 @@
     "./types": "./build/src/types.js",
     "./prometheus_provider": "./build/providers/prometheus_provider.js",
     "./collectors/*": "./build/src/collectors/*.js",
-    "./collect_http_metrics_middleware": "./build/src/middleware/collect_http_metrics_middleware.js"
+    "./collect_http_metrics_middleware": "./build/src/middleware/collect_http_metrics_middleware.js",
+    "./controllers/prometheus_metric_controller": "./build/src/controllers/prometheus_metric_controller.js"
   },
   "files": [
     "build"
