@@ -102,11 +102,29 @@ Adds metrics to monitor database queries made through `@adonisjs/lucid`.
 
 Adds metrics to monitor `@adonisjs/cache` operations.
 
+#### Options
+
+- `keyGroups`
+
+An array of `[RegExp, ((match: RegExpMatchArray) => string) | string]` tuples. The first element of the tuple is a regular expression that will be used to match keys. The second element is either a string or a function that will be used to transform the matched key into a new key. This is useful for grouping keys together. For example, if you have a cache that stores users by their ID ( `users:1`, `users:2` ... ) and you want to register metrics for all users together, you can use this option like so:
+
+```ts
+prometheusPlugin({
+  keyGroups: [
+    [/^users:(\d+)$/, 'users:*'],
+  ]
+})
+```
+
+This may be a good practice if you have a lot of keys, because [high cardinality can become a problem with Prometheus](https://stackoverflow.com/questions/46373442/how-dangerous-are-high-cardinality-labels-in-prometheus).
+
+
 #### Exposed Metrics
 
 - `cache_hits_total`: Counter for the total number of cache hits.
 - `cache_misses_total`: Counter for the total number of cache misses.
 - `cache_writes_total`: Counter for the total number of cache writes.
+
 
 ### Mail Collector
 
