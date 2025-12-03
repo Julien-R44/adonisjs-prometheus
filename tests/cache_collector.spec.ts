@@ -11,7 +11,11 @@ test.group('CacheCollector', () => {
     const emitter = new EmitterFactory().create(app.getApp()!)
     const register = new Registry()
 
-    new CacheCollector(emitter as any, { metricsPrefix: 'adonis', registry: register }).register()
+    new CacheCollector(emitter as any, {
+      metricsPrefix: 'adonis',
+      registry: register,
+      enableExemplars: false,
+    }).register()
 
     await emitter.emit('cache:hit', {
       key: 'users:123',
@@ -28,7 +32,11 @@ test.group('CacheCollector', () => {
     const emitter = new EmitterFactory().create(app.getApp()!)
     const register = new Registry()
 
-    new CacheCollector(emitter as any, { metricsPrefix: 'adonis', registry: register }).register()
+    new CacheCollector(emitter as any, {
+      metricsPrefix: 'adonis',
+      registry: register,
+      enableExemplars: false,
+    }).register()
 
     await emitter.emit('cache:miss', {
       key: 'posts:456',
@@ -44,7 +52,11 @@ test.group('CacheCollector', () => {
     const emitter = new EmitterFactory().create(app.getApp()!)
     const register = new Registry()
 
-    new CacheCollector(emitter as any, { metricsPrefix: 'adonis', registry: register }).register()
+    new CacheCollector(emitter as any, {
+      metricsPrefix: 'adonis',
+      registry: register,
+      enableExemplars: false,
+    }).register()
 
     await emitter.emit('cache:written', {
       key: 'sessions:abc123',
@@ -64,6 +76,7 @@ test.group('CacheCollector', () => {
     new CacheCollector(emitter as any, {
       metricsPrefix: 'adonis',
       registry: register,
+      enableExemplars: false,
       keyGroups: [
         [/^users:(\d+)$/, 'users:*'],
         [/^posts:(\d+)$/, 'posts:*'],
@@ -103,6 +116,7 @@ test.group('CacheCollector', () => {
     new CacheCollector(emitter as any, {
       metricsPrefix: 'adonis',
       registry: register,
+      enableExemplars: false,
       keyGroups: [
         [/^sessions:([\w-]+)$/, (match) => `sessions:${match[1].length > 10 ? 'long' : 'short'}`],
       ],
@@ -135,6 +149,7 @@ test.group('CacheCollector', () => {
     new CacheCollector(emitter as any, {
       metricsPrefix: 'adonis',
       registry: register,
+      enableExemplars: false,
       keyGroups: [[/^users:(\d+)$/, 'users:*']],
     }).register()
 
@@ -157,6 +172,7 @@ test.group('CacheCollector', () => {
     new CacheCollector(emitter as any, {
       metricsPrefix: 'adonis',
       registry: register,
+      enableExemplars: false,
       keyGroups: [
         [/^users:(\d+)$/, 'users:*'],
         [/^users:.*$/, 'users:all'],

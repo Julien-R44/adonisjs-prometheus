@@ -35,14 +35,28 @@ export class LucidCollector extends Collector {
   #onDbQuery(event: DbQueryEventNode) {
     if (!event.duration) return
 
-    this.#dbQueryDurationHistogram?.observe(
-      {
-        connection: event.connection,
-        model: event.model || 'unknown',
-        method: event.method,
-      },
-      this.#nanosecondsToSeconds(event.duration![1]),
-    )
+    const labels = {
+      connection: event.connection,
+      model: event.model || 'unknown',
+      method: event.method,
+    }
+
+    const exemplarLabels = this.getExemplarLabels()
+
+    if (this.exemplarsEnabled) {
+      // Type assertion needed due to prom-client type bug
+      // See: https://github.com/siimon/prom-client/issues/653
+      this.#dbQueryDurationHistogram?.observe({
+        labels,
+        value: this.#nanosecondsToSeconds(event.duration![1]),
+        exemplarLabels,
+      } as any)
+    } else {
+      this.#dbQueryDurationHistogram?.observe(
+        labels,
+        this.#nanosecondsToSeconds(event.duration![1]),
+      )
+    }
   }
 
   async register() {

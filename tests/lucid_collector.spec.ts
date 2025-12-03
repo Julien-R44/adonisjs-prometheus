@@ -12,7 +12,11 @@ test.group('LucidCollector', () => {
     const emitter = new EmitterFactory().create(app.getApp()!)
     const register = new Registry()
 
-    new LucidCollector(emitter as any, { metricsPrefix: 'adonis', registry: register }).register()
+    new LucidCollector(emitter as any, {
+      metricsPrefix: 'adonis',
+      registry: register,
+      enableExemplars: false,
+    }).register()
 
     await emitter.emit('db:query', {
       connection: 'mysql',
@@ -33,7 +37,11 @@ test.group('LucidCollector', () => {
     const emitter = new EmitterFactory().create(app.getApp()!)
     const register = new Registry()
 
-    new LucidCollector(emitter as any, { metricsPrefix: 'adonis', registry: register }).register()
+    new LucidCollector(emitter as any, {
+      metricsPrefix: 'adonis',
+      registry: register,
+      enableExemplars: false,
+    }).register()
 
     await emitter.emit('db:query', {
       connection: 'mysql',

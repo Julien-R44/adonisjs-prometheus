@@ -59,6 +59,59 @@ The available options are:
 - `metricsPrefix`: A prefix that will be added to all metric names. Defaults to the app name.
 - `ipsWhitelist`: A list of IP addresses allowed to access the metrics endpoint. If empty, everyone can access it. Defaults to an empty array.
 - `collectors`: The list of collectors that will be registered and expose new metrics. You can remove collectors you don't want to use.
+- `enableExemplars`: Enable OpenMetrics exemplars support. When enabled, metrics will include trace context (`traceId` and `spanId`) from OTEL. Defaults to `false`.
+
+## Exemplars
+
+[Exemplars](https://grafana.com/docs/grafana/latest/fundamentals/exemplars/) are a way to link metrics to traces. When enabled, this package will automatically attach `traceId` and `spanId` labels from the active OpenTelemetry span to your Counter and Histogram metrics.
+
+### Setup
+
+1. Install `@opentelemetry/api` as a dependency:
+
+```sh
+pnpm add @opentelemetry/api
+```
+
+2. Enable exemplars in your configuration:
+
+```ts
+export default defineConfig({
+  enableExemplars: true,
+  // ...
+})
+```
+
+When `enableExemplars` is set to `true`, the metrics registry will automatically be set to use the `OpenMetrics` format, which is required for exemplars support.
+
+### How it works
+
+When exemplars are enabled, the API for incrementing counters and observing histograms changes. Instead of simple `inc()` and `observe()` calls, you need to pass an object with `labels` and `exemplarLabels`:
+
+```ts
+// Without exemplars
+counter.inc({ method: 'GET', status: '200' })
+histogram.observe({ route: '/users' }, 0.5)
+
+// With exemplars
+counter.inc({ labels: { method: 'GET', status: '200' }, exemplarLabels: { traceId: '...', spanId: '...' } })
+histogram.observe({ labels: { route: '/users' }, exemplarLabels: { traceId: '...', spanId: '...' } }, 0.5)
+```
+
+This package handles this automatically: when `enableExemplars` is `true` in the global config and an active OpenTelemetry span exists, the `traceId` and `spanId` will be attached to metrics from the built-in collectors.
+
+> [!NOTE]
+> The API change only applies to metrics created with `enableExemplars: true` on the metric itself. If you create custom metrics using `prom-client` without setting `enableExemplars`, you can use the standard API (`counter.inc(labels)`) even when the global config has `enableExemplars: true`. However, if you enable exemplars on your custom metric, you'll need to use the exemplar API (`counter.inc({ labels, exemplarLabels, value })`).
+
+### Known TypeScript issue
+
+There's currently a [typing bug in prom-client](https://github.com/siimon/prom-client/issues/652) where `exemplarLabels` is incorrectly typed as `LabelValues<T>` instead of `Record<string, string>`. This causes TypeScript errors when using exemplars. The issue is tracked and should be fixed in a future release. In the meantime, feel free to use type assertions (`as any`) when calling `inc()` or `observe()` with `exemplarLabels`.
+
+### Requirements
+
+- Your application must be instrumented with OpenTelemetry to have active spans
+- The `@opentelemetry/api` package must be installed
+- Your Prometheus server must support OpenMetrics format to scrape exemplars
 
 ## Collectors
 

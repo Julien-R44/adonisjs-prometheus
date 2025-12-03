@@ -22,6 +22,18 @@ export class SystemCollector extends Collector {
   }
 
   async register() {
-    collectDefaultMetrics(this.options)
+    collectDefaultMetrics({
+      ...this.options,
+      register: this.options.registry,
+      prefix: this.options.metricsPrefix,
+      /**
+       * When exemplars are enabled, prom-client's default metrics
+       * will automatically populate traceId/spanId from OpenTelemetry.
+       *
+       * Note: The TypeScript types don't include enableExemplars but
+       * the implementation supports it for metrics like processCpuTotal.
+       */
+      enableExemplars: this.options.enableExemplars,
+    } as Parameters<typeof collectDefaultMetrics>[0])
   }
 }

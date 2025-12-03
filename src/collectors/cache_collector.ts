@@ -53,19 +53,33 @@ export class CacheCollector extends Collector {
     return key
   }
 
-  #onCacheHit(payload: { key: string; store: string; value: any }) {
+  #incrementCounter(
+    counter: Counter<'store' | 'key'> | undefined,
+    payload: { key: string; store: string },
+  ) {
     const key = this.#getKeyLabel(payload.key)
-    this.cacheHitsCounter?.inc({ store: payload.store, key })
+    const labels = { store: payload.store, key }
+    const exemplarLabels = this.getExemplarLabels()
+
+    if (this.exemplarsEnabled) {
+      // Type assertion needed due to prom-client type bug
+      // See: https://github.com/siimon/prom-client/issues/653
+      counter?.inc({ labels, exemplarLabels, value: 1 } as any)
+    } else {
+      counter?.inc(labels)
+    }
+  }
+
+  #onCacheHit(payload: { key: string; store: string; value: any }) {
+    this.#incrementCounter(this.cacheHitsCounter, payload)
   }
 
   #onCacheMiss(payload: { key: string; store: string }) {
-    const key = this.#getKeyLabel(payload.key)
-    this.cacheMissesCounter?.inc({ store: payload.store, key })
+    this.#incrementCounter(this.cacheMissesCounter, payload)
   }
 
   #onCacheWritten(payload: { key: string; store: string; value: any }) {
-    const key = this.#getKeyLabel(payload.key)
-    this.cacheWritesCounter?.inc({ store: payload.store, key })
+    this.#incrementCounter(this.cacheWritesCounter, payload)
   }
 
   async register() {

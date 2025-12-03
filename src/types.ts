@@ -35,13 +35,37 @@ export interface PrometheusConfiguration {
    * List of collectors to be used
    */
   collectors?: ConfigProvider<Collector>[]
+
+  /**
+   * Enable OpenMetrics exemplars support.
+   *
+   * When enabled:
+   * - The registry will be set to OpenMetrics format
+   * - Counters and Histograms will automatically include traceId/spanId from OpenTelemetry
+   * - You need to have `@opentelemetry/api` installed
+   *
+   * @see https://github.com/siimon/prom-client#exemplars
+   */
+  enableExemplars?: boolean
 }
 
 export type ResolvedPromConfig = {
   [K in keyof PrometheusConfiguration]-?: Exclude<PrometheusConfiguration[K], undefined>
 }
 
-export type CommonCollectorOptions = Pick<ResolvedPromConfig, 'metricsPrefix' | 'registry'>
+export type CommonCollectorOptions = Pick<
+  ResolvedPromConfig,
+  'metricsPrefix' | 'registry' | 'enableExemplars'
+>
+
+/**
+ * Labels for exemplars (traceId and spanId from OpenTelemetry)
+ */
+export interface ExemplarLabels {
+  traceId: string
+  spanId: string
+  [key: string]: string
+}
 
 /**
  * HTTP collector

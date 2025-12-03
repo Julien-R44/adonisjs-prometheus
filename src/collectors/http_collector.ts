@@ -78,18 +78,29 @@ export class HttpCollector extends Collector {
     if (this.#isExcludedRoute(event.ctx)) return
 
     const status = this.#createStatusCode(event.ctx)
-    const payload = {
+    const labels = {
       status,
       method: event.ctx.request.method(),
       ok: this.#isResponseOk(event.ctx.response) ? 'true' : 'false',
       route: event.ctx.route!.pattern,
     }
 
-    this.httpRequestCounter?.inc(payload)
-    this.httpRequestDurationHistogram?.observe(
-      payload,
-      this.#nanosecondsToSeconds(event.duration[1]),
-    )
+    const exemplarLabels = this.getExemplarLabels()
+
+    if (this.exemplarsEnabled) {
+      this.httpRequestCounter?.inc({ labels, exemplarLabels, value: 1 })
+      this.httpRequestDurationHistogram?.observe({
+        labels,
+        value: this.#nanosecondsToSeconds(event.duration[1]),
+        exemplarLabels,
+      })
+    } else {
+      this.httpRequestCounter?.inc(labels)
+      this.httpRequestDurationHistogram?.observe(
+        labels,
+        this.#nanosecondsToSeconds(event.duration[1]),
+      )
+    }
   }
 
   /**

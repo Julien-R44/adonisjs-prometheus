@@ -53,7 +53,8 @@
     "@adonisjs/cache": "^1.0.0",
     "@adonisjs/core": "^6.15.1",
     "@adonisjs/lucid": "^21.4.0",
-    "@adonisjs/mail": "^9.2.2"
+    "@adonisjs/mail": "^9.2.2",
+    "@opentelemetry/api": "^1.0.0"
   },
   "peerDependenciesMeta": {
     "@adonisjs/mail": {
@@ -63,6 +64,9 @@
       "optional": true
     },
     "@adonisjs/cache": {
+      "optional": true
+    },
+    "@opentelemetry/api": {
       "optional": true
     }
   },
@@ -81,6 +85,7 @@
     "@japa/file-system": "^2.3.2",
     "@japa/runner": "^4.4.0",
     "@julr/tooling-configs": "^4.0.0",
+    "@opentelemetry/api": "^1.9.0",
     "@swc/core": "^1.15.3",
     "@types/node": "^24.10.1",
     "c8": "^10.1.3",

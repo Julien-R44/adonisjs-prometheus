@@ -28,6 +28,7 @@ export default class PrometheusProvider {
 
     for (const collectorConfigProvider of config.collectors) {
       const collector = await collectorConfigProvider.resolver(this.app)
+      await collector.init()
       collector.register()
     }
 

@@ -27,6 +27,19 @@ export class MailCollector extends Collector {
     super(options)
   }
 
+  #incrementCounter(status: 'success' | 'error') {
+    const labels = { status }
+    const exemplarLabels = this.getExemplarLabels()
+
+    if (this.exemplarsEnabled) {
+      // Type assertion needed due to prom-client type bug
+      // See: https://github.com/siimon/prom-client/issues/653
+      this.#mailSentCounter?.inc({ labels, exemplarLabels, value: 1 } as any)
+    } else {
+      this.#mailSentCounter?.inc(labels)
+    }
+  }
+
   async register() {
     this.#mailSentCounter = this.createCounter({
       name: 'mail_sent_total',
@@ -34,7 +47,7 @@ export class MailCollector extends Collector {
       labelNames: ['status'],
     })
 
-    this.emitter.on('mail:sent', () => this.#mailSentCounter?.inc({ status: 'success' }))
-    this.emitter.on('queued:mail:error', () => this.#mailSentCounter?.inc({ status: 'error' }))
+    this.emitter.on('mail:sent', () => this.#incrementCounter('success'))
+    this.emitter.on('queued:mail:error', () => this.#incrementCounter('error'))
   }
 }
