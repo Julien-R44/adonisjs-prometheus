@@ -57,7 +57,7 @@ The available options are:
 
 - `endpoint`: The URL of the endpoint where metrics will be exposed. Defaults to `/metrics`.
 - `metricsPrefix`: A prefix that will be added to all metric names. Defaults to the app name.
-- `ipsWhitelist`: A list of IP addresses allowed to access the metrics endpoint. If empty, everyone can access it. Defaults to an empty array.
+- `ipsWhitelist`: A list of IP addresses or CIDR ranges allowed to access the metrics endpoint. Supports both exact IPs (`'10.0.0.5'`) and CIDR notation (`'192.168.1.0/24'`). If empty, everyone can access it. Defaults to an empty array.
 - `collectors`: The list of collectors that will be registered and expose new metrics. You can remove collectors you don't want to use.
 - `enableExemplars`: Enable OpenMetrics exemplars support. When enabled, metrics will include trace context (`traceId` and `spanId`) from OTEL. Defaults to `false`.
 
