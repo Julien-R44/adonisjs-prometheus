@@ -179,7 +179,7 @@ This package handles this automatically: when `enableExemplars` is `true` in the
 
 ### Known TypeScript issue
 
-There's currently a [typing bug in prom-client](https://github.com/siimon/prom-client/issues/652) where `exemplarLabels` is incorrectly typed as `LabelValues<T>` instead of `Record<string, string>`. This causes TypeScript errors when using exemplars. The issue is tracked and should be fixed in a future release. In the meantime, feel free to use type assertions (`as any`) when calling `inc()` or `observe()` with `exemplarLabels`.
+There's currently a typing bug where `exemplarLabels` is incorrectly typed. This causes TypeScript errors when using exemplars. The issue should be fixed in a future release. In the meantime, feel free to use type assertions (`as any`) when calling `inc()` or `observe()` with `exemplarLabels`.
 
 ### Requirements
 
