@@ -2,27 +2,34 @@
 
 import type { Counter } from 'prom-client'
 import { configProvider } from '@adonisjs/core'
+import type { CacheService } from '@adonisjs/cache/types'
 import type { EmitterService } from '@adonisjs/core/types'
+import { prometheusPlugin } from '@bentocache/plugin-prometheus'
 
 import { Collector } from './collector.js'
 import { mergeCommonAndCollectorOptions } from '../utils.js'
 import type { CommonCollectorOptions, ResolvedPromConfig } from '../types.js'
 
-export interface CacheCollectorOptions {
+type PrometheusPluginOptions = Parameters<typeof prometheusPlugin>[0]
+export type CacheCollectorOptions = PrometheusPluginOptions & {
   /**
-   * Key groups
+   * Create the CacheCollector using BentoCache's Prometheus plugin
+   * See https://bentocache.dev/docs/plugin-prometheus
    *
-   * See https://bentocache.dev/docs/plugin-prometheus#keygroups
+   * This option will be the default way to create the CacheCollector
+   * in a future major release so you should start using it now to
+   * prepare for the migration.
    */
-  keyGroups?: Array<[RegExp, ((match: RegExpMatchArray) => string) | string]>
+  useNewCollector?: boolean
 }
 
 export function cacheCollector(options: CacheCollectorOptions = {}) {
   return configProvider.create(async (app) => {
     const config = app.config.get<ResolvedPromConfig>('prometheus')
     const emitter = await app.container.make('emitter')
+    const cache = await app.container.make('cache.manager')
 
-    return new CacheCollector(emitter, mergeCommonAndCollectorOptions(config, options))
+    return new CacheCollector(emitter, cache, mergeCommonAndCollectorOptions(config, options))
   })
 }
 
@@ -33,6 +40,7 @@ export class CacheCollector extends Collector {
 
   constructor(
     private emitter: EmitterService,
+    private cache: CacheService,
     private options: CommonCollectorOptions & CacheCollectorOptions,
   ) {
     super(options)
@@ -83,6 +91,21 @@ export class CacheCollector extends Collector {
   }
 
   async register() {
+    if (this.options.useNewCollector) {
+      const prefix = this.options.metricsPrefix.endsWith('_')
+        ? `${this.options.metricsPrefix}cache`
+        : `${this.options.metricsPrefix}_cache`
+
+      const plugin = prometheusPlugin({
+        keyGroups: this.options.keyGroups,
+        prefix,
+        registry: this.options.registry,
+      })
+
+      plugin.register(this.cache)
+      return
+    }
+
     this.cacheHitsCounter = this.createCounter({
       name: 'cache_hits_total',
       help: 'Total number of cache hits',

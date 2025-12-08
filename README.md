@@ -103,28 +103,72 @@ Adds metrics to monitor database queries made through `@adonisjs/lucid`.
 
 Adds metrics to monitor `@adonisjs/cache` operations.
 
-#### Options
+The Cache Collector has two implementations:
 
-- `keyGroups`
+#### New implementation (Recommended)
 
-An array of `[RegExp, ((match: RegExpMatchArray) => string) | string]` tuples. The first element of the tuple is a regular expression that will be used to match keys. The second element is either a string or a function that will be used to transform the matched key into a new key. This is useful for grouping keys together. For example, if you have a cache that stores users by their ID ( `users:1`, `users:2` ... ) and you want to register metrics for all users together, you can use this option like so:
+The recommended way to use the Cache Collector is now with `useNewCollector: true`, which leverages [BentoCache's native Prometheus plugin](https://bentocache.dev/docs/plugin-prometheus). This provides richer metrics and better integration with BentoCache.
 
 ```ts
-prometheusPlugin({
+cacheCollector({
+  useNewCollector: true, // Enable the new implementation
   keyGroups: [
     [/^users:(\d+)$/, 'users:*'],
   ]
 })
 ```
 
-This may be a good practice if you have a lot of keys, because [high cardinality can become a problem with Prometheus](https://stackoverflow.com/questions/46373442/how-dangerous-are-high-cardinality-labels-in-prometheus).
+**Exposed Metrics:**
 
+- `cache_hits`: Counter for the total number of cache hits
+- `cache_misses`: Counter for the total number of cache misses
+- `cache_writes`: Counter for the total number of cache writes
+- `cache_deletes`: Counter for the total number of cache deletes
+- `cache_clears`: Counter for the total number of cache clears
+- `cache_graced_hits`: Counter for the total number of graced hits
+- `cache_bus_messages_published`: Counter for bus messages published
+- `cache_bus_messages_received`: Counter for bus messages received
 
-#### Exposed Metrics
+**Options:**
 
-- `cache_hits_total`: Counter for the total number of cache hits.
-- `cache_misses_total`: Counter for the total number of cache misses.
-- `cache_writes_total`: Counter for the total number of cache writes.
+- `useNewCollector`: Set to `true` to use BentoCache's native plugin (recommended)
+- `keyGroups`: An array of `[RegExp, ((match: RegExpMatchArray) => string) | string]` tuples for grouping cache keys. See [BentoCache documentation](https://bentocache.dev/docs/plugin-prometheus) for more details.
+
+> [!TIP]
+> The modern implementation will become the default in a future major release, so we recommend migrating to it now.
+
+#### Legacy Implementation
+
+The legacy implementation uses event emitters to track cache operations. This is the default for backward compatibility but will be removed in future versions.
+
+```ts
+cacheCollector({
+  keyGroups: [
+    [/^users:(\d+)$/, 'users:*'],
+  ]
+})
+```
+
+**Exposed Metrics:**
+
+- `cache_hits_total`: Counter for the total number of cache hits
+- `cache_misses_total`: Counter for the total number of cache misses
+- `cache_writes_total`: Counter for the total number of cache writes
+
+**Options:**
+
+- `keyGroups`: An array of `[RegExp, ((match: RegExpMatchArray) => string) | string]` tuples for grouping cache keys together. This helps avoid [high cardinality issues](https://stackoverflow.com/questions/46373442/how-dangerous-are-high-cardinality-labels-in-prometheus) when you have many unique cache keys.
+
+**Example:**
+
+```ts
+cacheCollector({
+  keyGroups: [
+    [/^users:(\d+)$/, 'users:*'],
+    [/^posts:(\d+)$/, 'posts:*'],
+  ]
+})
+```
 
 
 ### Mail Collector
