@@ -13,3 +13,5 @@ jobs:
 
   test:
     uses: julien-r44/.github/.github/workflows/test.yml@main
+    with:
+      node-versions: '["latest"]'
