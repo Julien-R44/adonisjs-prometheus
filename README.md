@@ -1,10 +1,13 @@
 <div align="center">
-  <img src="https://i.imgur.com/ny3ka9X.png"  />  
+  <img src="https://i.imgur.com/ny3ka9X.png"  />
 </div>
 
-# adonisjs-prometheus 
+# adonisjs-prometheus
 
 📊 Prometheus package for AdonisJS
+
+> [!NOTE]
+> This is the version for **AdonisJS 7**. For AdonisJS 6, see the [1.x branch](https://github.com/Julien-R44/adonis5-prometheus/tree/1.x) and use `@julr/adonisjs-prometheus@^1`.
 
 ## Installation
 

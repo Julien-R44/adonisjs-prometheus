@@ -6,9 +6,9 @@ import type { CacheService } from '@adonisjs/cache/types'
 import type { EmitterService } from '@adonisjs/core/types'
 import { prometheusPlugin } from '@bentocache/plugin-prometheus'
 
-import { Collector } from './collector.js'
-import { mergeCommonAndCollectorOptions } from '../utils.js'
-import type { CommonCollectorOptions, ResolvedPromConfig } from '../types.js'
+import { Collector } from './collector.ts'
+import { mergeCommonAndCollectorOptions } from '../utils.ts'
+import type { CommonCollectorOptions, ResolvedPromConfig } from '../types.ts'
 
 type PrometheusPluginOptions = Parameters<typeof prometheusPlugin>[0]
 export type CacheCollectorOptions = PrometheusPluginOptions & {

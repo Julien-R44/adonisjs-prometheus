@@ -1,6 +1,6 @@
 import { test } from '@japa/runner'
 
-import { IpWhitelist } from '../src/ip_whitelist.js'
+import { IpWhitelist } from '../src/ip_whitelist.ts'
 
 test.group('IP Whitelist', () => {
   test('allow any IP when whitelist is empty', async ({ assert }) => {

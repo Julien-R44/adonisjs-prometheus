@@ -1,8 +1,8 @@
 import { Counter, Gauge, Histogram } from 'prom-client'
 import type { CounterConfiguration, GaugeConfiguration, HistogramConfiguration } from 'prom-client'
 
-import type { CommonCollectorOptions, ExemplarLabels } from '../types.js'
-import { getExemplarLabelsFromOtel, tryLoadOpenTelemetry } from '../utils.js'
+import type { CommonCollectorOptions, ExemplarLabels } from '../types.ts'
+import { getExemplarLabelsFromOtel, tryLoadOpenTelemetry } from '../utils.ts'
 
 export abstract class Collector {
   #otelApi: typeof import('@opentelemetry/api') | undefined

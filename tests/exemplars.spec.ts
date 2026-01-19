@@ -1,7 +1,7 @@
 import { test } from '@japa/runner'
 import { Counter, Registry } from 'prom-client'
 
-import { defineConfig } from '../src/define_config.js'
+import { defineConfig } from '../src/define_config.ts'
 
 test.group('Exemplars configuration', () => {
   test('enableExemplars defaults to false', async ({ assert }) => {

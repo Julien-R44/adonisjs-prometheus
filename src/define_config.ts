@@ -1,6 +1,6 @@
 import { register, Registry } from 'prom-client'
 
-import type { PrometheusConfiguration, ResolvedPromConfig } from './types.js'
+import type { PrometheusConfiguration, ResolvedPromConfig } from './types.ts'
 
 function buildMetricsPrefix(prefix: string | undefined): string {
   if (!prefix) return ''

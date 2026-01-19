@@ -1,10 +1,9 @@
-import { defu } from 'defu'
 import { createServer } from 'node:http'
 import { IgnitorFactory } from '@adonisjs/core/factories'
 import type { ApplicationService } from '@adonisjs/core/types'
 
-import { defineConfig } from '../index.js'
-import type { PrometheusConfiguration } from '../src/types.js'
+import { defineConfig } from '../index.ts'
+import type { PrometheusConfiguration } from '../src/types.ts'
 
 export const BASE_URL = new URL('../test/__app/', import.meta.url)
 
@@ -18,7 +17,7 @@ export async function setupApp(
 ) {
   const ignitor = new IgnitorFactory()
     .merge({
-      config: { prometheus: defu(options.promConfig, DEFAULT_PROMETHEUS_CONFIG) },
+      config: { prometheus: defineConfig({ ...DEFAULT_PROMETHEUS_CONFIG, ...options.promConfig }) },
       rcFileContents: { providers: [() => import('../providers/prometheus_provider.js')] },
     })
     .withCoreProviders()

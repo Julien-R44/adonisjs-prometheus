@@ -1,4 +1,4 @@
-import type { CommonCollectorOptions, ExemplarLabels } from './types.js'
+import type { CommonCollectorOptions, ExemplarLabels } from './types.ts'
 
 export function mergeCommonAndCollectorOptions(
   commonOptions: CommonCollectorOptions,

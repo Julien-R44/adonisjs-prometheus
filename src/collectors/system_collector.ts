@@ -1,13 +1,13 @@
 import { configProvider } from '@adonisjs/core'
 import { collectDefaultMetrics } from 'prom-client'
 
-import { Collector } from './collector.js'
-import { mergeCommonAndCollectorOptions } from '../utils.js'
+import { Collector } from './collector.ts'
+import { mergeCommonAndCollectorOptions } from '../utils.ts'
 import type {
   CommonCollectorOptions,
   ResolvedPromConfig,
   SystemCollectorOptions,
-} from '../types.js'
+} from '../types.ts'
 
 export function systemCollector(options?: SystemCollectorOptions) {
   return configProvider.create(async (app) => {

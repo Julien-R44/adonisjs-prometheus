@@ -1,7 +1,7 @@
 import type { ApplicationService } from '@adonisjs/core/types'
 
-import type { ResolvedPromConfig as ResolvedPrometheusConfiguration } from '../src/types.js'
-import { PrometheusMetricController } from '../src/controllers/prometheus_metric_controller.js'
+import type { ResolvedPromConfig as ResolvedPrometheusConfiguration } from '../src/types.ts'
+import { PrometheusMetricController } from '../src/controllers/prometheus_metric_controller.ts'
 
 /**
  * Prometheus provider

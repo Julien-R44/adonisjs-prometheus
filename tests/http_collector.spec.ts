@@ -3,8 +3,8 @@ import { Registry } from 'prom-client'
 import { IgnitorFactory } from '@adonisjs/core/factories'
 import { EmitterFactory } from '@adonisjs/core/factories/events'
 
-import { secondsToNanoSeconds } from './helpers.js'
-import { HttpCollector } from '../src/collectors/http_collector.js'
+import { secondsToNanoSeconds } from './helpers.ts'
+import { HttpCollector } from '../src/collectors/http_collector.ts'
 
 function createMockHttpContext(options: { method?: string; statusCode?: number; route?: string }) {
   return {

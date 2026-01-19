@@ -4,9 +4,9 @@ import type { Counter } from 'prom-client'
 import { configProvider } from '@adonisjs/core'
 import type { EmitterService } from '@adonisjs/core/types'
 
-import { Collector } from './collector.js'
-import { mergeCommonAndCollectorOptions } from '../utils.js'
-import type { CommonCollectorOptions, ResolvedPromConfig } from '../types.js'
+import { Collector } from './collector.ts'
+import { mergeCommonAndCollectorOptions } from '../utils.ts'
+import type { CommonCollectorOptions, ResolvedPromConfig } from '../types.ts'
 
 export function mailCollector() {
   return configProvider.create(async (app) => {

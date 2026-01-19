@@ -2,7 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import type { ConfigProvider } from '@adonisjs/core/types'
 import type { DefaultMetricsCollectorConfiguration, Registry } from 'prom-client'
 
-import type { Collector } from './collectors/collector.js'
+import type { Collector } from './collectors/collector.ts'
 
 export interface PrometheusConfiguration {
   /**

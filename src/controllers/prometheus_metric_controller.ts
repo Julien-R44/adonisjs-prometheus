@@ -2,8 +2,8 @@ import * as prometheus from 'prom-client'
 import config from '@adonisjs/core/services/config'
 import type { HttpContext } from '@adonisjs/core/http'
 
-import { IpWhitelist } from '../ip_whitelist.js'
-import type { ResolvedPromConfig } from '../types.js'
+import { IpWhitelist } from '../ip_whitelist.ts'
+import type { ResolvedPromConfig } from '../types.ts'
 
 export class PrometheusMetricController {
   #config: ResolvedPromConfig

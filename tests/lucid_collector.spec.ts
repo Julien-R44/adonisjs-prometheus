@@ -3,8 +3,8 @@ import { Registry } from 'prom-client'
 import { IgnitorFactory } from '@adonisjs/core/factories'
 import { EmitterFactory } from '@adonisjs/core/factories/events'
 
-import { secondsToNanoSeconds } from './helpers.js'
-import { LucidCollector } from '../src/collectors/lucid_collector.js'
+import { secondsToNanoSeconds } from './helpers.ts'
+import { LucidCollector } from '../src/collectors/lucid_collector.ts'
 
 test.group('LucidCollector', () => {
   test('monitor queries', async ({ assert, fs }) => {

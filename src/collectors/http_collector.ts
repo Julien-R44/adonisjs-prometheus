@@ -4,9 +4,9 @@ import type { HttpContext } from '@adonisjs/core/http'
 import type { EmitterService } from '@adonisjs/core/types'
 import type { HttpRequestFinishedPayload } from '@adonisjs/core/types/http'
 
-import { Collector } from './collector.js'
-import { mergeCommonAndCollectorOptions } from '../utils.js'
-import type { CommonCollectorOptions, HttpCollectorOptions, ResolvedPromConfig } from '../types.js'
+import { Collector } from './collector.ts'
+import { mergeCommonAndCollectorOptions } from '../utils.ts'
+import type { CommonCollectorOptions, HttpCollectorOptions, ResolvedPromConfig } from '../types.ts'
 
 export function httpCollector(options?: HttpCollectorOptions) {
   return configProvider.create(async (app) => {

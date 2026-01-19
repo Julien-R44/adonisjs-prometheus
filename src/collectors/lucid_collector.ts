@@ -5,9 +5,9 @@ import { configProvider } from '@adonisjs/core'
 import type { EmitterService } from '@adonisjs/core/types'
 import type { DbQueryEventNode } from '@adonisjs/lucid/types/database'
 
-import { Collector } from './collector.js'
-import { mergeCommonAndCollectorOptions } from '../utils.js'
-import type { CommonCollectorOptions, LucidCollectorOptions, ResolvedPromConfig } from '../types.js'
+import { Collector } from './collector.ts'
+import { mergeCommonAndCollectorOptions } from '../utils.ts'
+import type { CommonCollectorOptions, LucidCollectorOptions, ResolvedPromConfig } from '../types.ts'
 
 export function lucidCollector(options?: LucidCollectorOptions) {
   return configProvider.create(async (app) => {
