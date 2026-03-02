@@ -7,7 +7,7 @@
 📊 Prometheus package for AdonisJS
 
 > [!NOTE]
-> This is the version for **AdonisJS 7**. For AdonisJS 6, see the [1.x branch](https://github.com/Julien-R44/adonis5-prometheus/tree/1.x) and use `@julr/adonisjs-prometheus@^1`.
+> This is the version for **AdonisJS 7**. For AdonisJS 6, see the [1.x branch](https://github.com/Julien-R44/adonisjs-prometheus/tree/1.x) and use `@julr/adonisjs-prometheus@^1`.
 
 ## Installation
 
