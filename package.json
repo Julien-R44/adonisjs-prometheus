@@ -44,9 +44,9 @@
     "build": "pnpm compile",
     "release": "pnpm build && pnpm release-it",
     "version": "pnpm build",
-    "format": "prettier --write .",
+    "format": "oxfmt --write .",
     "prepublishOnly": "pnpm build",
-    "lint": "eslint .",
+    "lint": "oxlint .",
     "quick:test": "node --import=@poppinss/ts-exec --enable-source-maps bin/test.ts",
     "typecheck": "tsc --noEmit"
   },
@@ -91,19 +91,17 @@
     "@japa/assert": "^4.2.0",
     "@japa/file-system": "^3.0.0",
     "@japa/runner": "^5.3.0",
-    "@julr/tooling-configs": "^4.0.0",
     "@opentelemetry/api": "^1.9.0",
     "@poppinss/ts-exec": "^1.4.4",
     "@types/node": "^25.3.3",
     "c8": "^11.0.0",
     "copyfiles": "^2.4.1",
     "del-cli": "^7.0.0",
-    "eslint": "^9.39.3",
-    "prettier": "^3.8.1",
+    "oxfmt": "^0.36.0",
+    "oxlint": "^1.51.0",
     "release-it": "^19.2.4",
     "typescript": "^5.9.3"
   },
-  "prettier": "@julr/tooling-configs/prettier",
   "publishConfig": {
     "access": "public",
     "tag": "next"

@@ -115,9 +115,7 @@ The recommended way to use the Cache Collector is now with `useNewCollector: tru
 ```ts
 cacheCollector({
   useNewCollector: true, // Enable the new implementation
-  keyGroups: [
-    [/^users:(\d+)$/, 'users:*'],
-  ]
+  keyGroups: [[/^users:(\d+)$/, 'users:*']],
 })
 ```
 
@@ -146,9 +144,7 @@ The legacy implementation uses event emitters to track cache operations. This is
 
 ```ts
 cacheCollector({
-  keyGroups: [
-    [/^users:(\d+)$/, 'users:*'],
-  ]
+  keyGroups: [[/^users:(\d+)$/, 'users:*']],
 })
 ```
 
@@ -169,10 +165,9 @@ cacheCollector({
   keyGroups: [
     [/^users:(\d+)$/, 'users:*'],
     [/^posts:(\d+)$/, 'posts:*'],
-  ]
+  ],
 })
 ```
-
 
 ### Mail Collector
 
@@ -215,8 +210,14 @@ counter.inc({ method: 'GET', status: '200' })
 histogram.observe({ route: '/users' }, 0.5)
 
 // With exemplars
-counter.inc({ labels: { method: 'GET', status: '200' }, exemplarLabels: { traceId: '...', spanId: '...' } })
-histogram.observe({ labels: { route: '/users' }, exemplarLabels: { traceId: '...', spanId: '...' } }, 0.5)
+counter.inc({
+  labels: { method: 'GET', status: '200' },
+  exemplarLabels: { traceId: '...', spanId: '...' },
+})
+histogram.observe(
+  { labels: { route: '/users' }, exemplarLabels: { traceId: '...', spanId: '...' } },
+  0.5,
+)
 ```
 
 This package handles this automatically: when `enableExemplars` is `true` in the global config and an active OpenTelemetry span exists, the `traceId` and `spanId` will be attached to metrics from the built-in collectors.
@@ -233,7 +234,6 @@ There's currently a typing bug where `exemplarLabels` is incorrectly typed. This
 - Your application must be instrumented with OpenTelemetry to have active spans
 - The `@opentelemetry/api` package must be installed
 - Your Prometheus server must support OpenMetrics format to scrape exemplars
-
 
 ## Custom metrics
 
