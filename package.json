@@ -1,7 +1,7 @@
 {
   "name": "@julr/adonisjs-prometheus",
   "type": "module",
-  "version": "2.0.0-next.1",
+  "version": "2.1.0",
   "packageManager": "pnpm@10.30.3",
   "description": "Prometheus wrapper for AdonisJS",
   "author": "Julien Ripouteau <julien@ripouteau.com>",
