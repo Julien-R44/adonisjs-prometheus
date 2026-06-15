@@ -43,6 +43,10 @@ export abstract class Collector {
       ? this.commonOptions.metricsPrefix.slice(0, -1)
       : this.commonOptions.metricsPrefix
 
+    if (!prefix.length) {
+      return name
+    }
+
     return [prefix, name].join('_')
   }
 
